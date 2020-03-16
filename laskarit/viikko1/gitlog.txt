@@ -1,0 +1,106 @@
+commit 0083236cc9cb3fc4624a5546c3a6749d1fb2a913
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 13:11:24 2020 +0200
+
+    poistettu file1 ja uudelleennimetty file2
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 504e4f90645231a53340133ad5642c5413d12d51
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 13:09:07 2020 +0200
+
+    lisätty hakemisto ja kolme tiedostoa
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 66c6f7e3a796edb18bf869b36f985188bcd101fe
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 13:07:50 2020 +0200
+
+    luotu kolme tiedostoa
+
+ file1 | 0
+ file2 | 0
+ file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e8770a5d9de942fabaf06f9fca781e781d477e0f
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:59:36 2020 +0200
+
+    taas tehty juttuja
+
+ eka.txt    | 6 ++----
+ kolmas.txt | 1 +
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+commit 4130f01e7615b629e1575a840b776b4727d39d1d
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:56:39 2020 +0200
+
+    uudelleennimetty tiedosto.txt eka.txt
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit a6031f0795462075a6f124a440742cb4aa120555
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:55:36 2020 +0200
+
+    poistettu toinen
+
+ toinen.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit 0035c013bc0a5fab9541f3e468945c0d32fcfc9e
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:45:48 2020 +0200
+
+    lisätty tekstiä tiedostoon, poistettu osa ja lisätty taas
+
+ tiedosto.txt | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+commit dc25a9d3e49384be2d942dc17e62abe1cd022464
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:17:01 2020 +0200
+
+    hakemisto ja neljäs lisätty
+
+ "stuff/nelj\303\244s.txt" | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit de70333cc7746dd4a63f0d3af1610b1cc65f145d
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:15:36 2020 +0200
+
+    kolmas lisätty
+
+ kolmas.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+commit d87e908d81c9e99f9008aec63d07a01d7d617e7c
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:13:21 2020 +0200
+
+    muutos ja lisäys
+
+ tiedosto.txt | 1 +
+ toinen.txt   | 0
+ 2 files changed, 1 insertion(+)
+
+commit d332e0f6d807f23ab156402b0098e4f758fa9be2
+Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
+Date:   Mon Mar 16 12:10:24 2020 +0200
+
+    tiedosto.txt luotu
+
+ tiedosto.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
