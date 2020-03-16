@@ -1,4 +1,4 @@
-# OT-HARJOITUSTYÖ
+# OT-harjoitustyö
 ## Tehtavat
 ### Viikko 1
 
