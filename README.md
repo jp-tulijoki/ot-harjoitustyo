@@ -1,3 +1,3 @@
-#OT-harjoitustyö
+# OT-harjoitustyö
 
-Tähän repositiorioon tulee _tietojenkäsittelytieteen aineopinotojen_ kurssin **Ohjelmistotekniikka** harjoitustyö.
+Tähän repositiorioon tulee _tietojenkäsittelytieteen aineopintojen_ kurssin **Ohjelmistotekniikka** harjoitustyö.
