@@ -1,3 +1,5 @@
+gitlog.txt
+
 commit 0083236cc9cb3fc4624a5546c3a6749d1fb2a913
 Author: Juha-Pekka Tulijoki <jp.tulijoki@gmail.com>
 Date:   Mon Mar 16 13:11:24 2020 +0200
