@@ -1,3 +1,6 @@
 # OT-harjoitustyö
+## Tehtavat
+### Viikko 1
 
-Tähän repositiorioon tulee _tietojenkäsittelytieteen aineopintojen_ kurssin **Ohjelmistotekniikka** harjoitustyö.
+[gitlog.txt](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+[komentorivi.txt](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
