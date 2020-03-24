@@ -1,4 +1,4 @@
-# Vaatimusmaarittely
+# Vaatimusmäärittely
 ## Sovelluksen tarkoitus
 Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensisijaisesti sovellus on suunnattu kestävyysharjoitteluun, jota tuetaan voimaharjoittelulla. Sovellus tarjoaa käyttäjälle myös mahdollisuuden tarkastella suorituksiaan ja saada tilastotietoa, jota voi hyödyntää harjoittelussaan.
 ## Käyttäjät
