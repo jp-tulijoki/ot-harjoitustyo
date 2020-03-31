@@ -8,7 +8,7 @@ Aluksi sovelluksella on ainoastaan yksi käyttäjärooli eli normaali käyttäj�
 * käyttäjä voi luoda järjestelmään käyttäjätunnuksen
   * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä
   * lisäksi on asetettava salasana
-  * käyttäjätunnuksen luonnin yhteydessä luodaan käyttäjäprofiili ja asetetaan tarpeelliset tiedot (ainakin nimi, syntymäaika ja maksimisyke)
+  * käyttäjätunnuksen luonnin yhteydessä luodaan käyttäjäprofiili ja asetetaan tarpeelliset tiedot (ainakin nimi, ikä ja maksimisyke)
 * käyttäjä voi kirjautua järjestelmään
   * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana 
   * jos käyttäjää ei ole olemassa, järjestelmä ilmoittaa tästä
