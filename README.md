@@ -4,6 +4,8 @@ Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensis
 ## Sovellus
 [Vaatimusmäärittely](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
 
+[Arkkitehtuurikuvaus](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)
+
 [Tuntikirjanpito](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 
 ### Komentorivitoiminnot
