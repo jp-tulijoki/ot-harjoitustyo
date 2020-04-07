@@ -8,6 +8,7 @@ package workoutjournal.domain;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import workoutjournal.DAO.DAO;
 import workoutjournal.DAO.UserDAO;
 import workoutjournal.domain.Sex;
 
@@ -16,9 +17,11 @@ import workoutjournal.domain.Sex;
  * @author tulijoki
  */
 public class JournalTools {
+    private DAO DAO;
     private UserDAO userDAO;
 
-    public JournalTools(UserDAO userDAO) {
+    public JournalTools(DAO DAO, UserDAO userDAO) {
+        this.DAO = DAO;
         this.userDAO = userDAO;
     }
         
@@ -56,5 +59,20 @@ public class JournalTools {
             Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+    
+    public void closeDatabaseConnection() {
+        try {
+            userDAO.closeConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void getDatabaseConnection() {
+        try {
+            userDAO.getConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

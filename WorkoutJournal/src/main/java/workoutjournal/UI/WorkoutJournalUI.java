@@ -14,13 +14,15 @@ import workoutjournal.domain.*;
 public class WorkoutJournalUI {
     
     public static void main(String[] args) {
+        DAO DAO = new DAO();
         UserDAO userDao = new UserDAO();
-        JournalTools tools = new JournalTools(userDao);
+        JournalTools tools = new JournalTools(DAO, userDao);
         
         System.out.println(tools.createUser("mikko", "Mikko", 20, Sex.male));
         System.out.println(tools.countMaxHeartRate(30, Sex.female));
         System.out.println(tools.countMaxHeartRate(50, Sex.male));
         System.out.println(tools.deleteUser("maija90"));
+        tools.closeDatabaseConnection();
         
     }
 }
