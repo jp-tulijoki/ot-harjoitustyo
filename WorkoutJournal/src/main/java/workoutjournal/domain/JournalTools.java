@@ -8,7 +8,8 @@ package workoutjournal.domain;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import workoutjournal.DAO.DBUserDAO;
+import workoutjournal.DAO.UserDAO;
+//import workoutjournal.DAO.DBUserDAO;
 import workoutjournal.domain.Sex;
 import workoutjournal.domain.User;
 
@@ -17,10 +18,10 @@ import workoutjournal.domain.User;
  * @author tulijoki
  */
 public class JournalTools {
-    private DBUserDAO userDAO;
+    private UserDAO userDAO;
     private User loggedIn;
 
-    public JournalTools(DBUserDAO userDAO) {
+    public JournalTools(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
         
@@ -77,5 +78,8 @@ public class JournalTools {
         loggedIn = null;
     }
     
+    public User getLoggedUser() {
+        return loggedIn;
+    }
 
 }

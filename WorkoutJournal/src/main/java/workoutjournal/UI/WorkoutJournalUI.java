@@ -28,13 +28,20 @@ public class WorkoutJournalUI {
         } catch (SQLException ex) {
         
 
-        DBUserDAO userDao = new DBUserDAO(conn);
+        UserDAO userDao = new DBUserDAO(conn);
         JournalTools tools = new JournalTools(userDao);
         
         System.out.println(tools.createUser("mikko999", "Mikko", 20, Sex.male));
         System.out.println(tools.countMaxHeartRate(30, Sex.female));
         System.out.println(tools.countMaxHeartRate(50, Sex.male));
         System.out.println(tools.deleteUser("maija90"));
+        
+        tools.login("mikko999");
+        System.out.println("Kirjautunut käyttäjä: " + tools.getLoggedUser().getUsername());
+        tools.logout();
+        if (tools.getLoggedUser() == null) {
+            System.out.println("Ei käyttäjää kirjautuneena.");
+        }
         
         conn.close();
 

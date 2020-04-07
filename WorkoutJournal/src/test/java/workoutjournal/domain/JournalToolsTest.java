@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import workoutjournal.DAO.DBUserDAO;
+import workoutjournal.DAO.*;
 
 /**
  *
@@ -19,7 +19,7 @@ import workoutjournal.DAO.DBUserDAO;
  */
 public class JournalToolsTest {
     
-    DBUserDAO userDAO;
+    UserDAO userDAO;
     JournalTools tools;
     Connection connTest;
     
