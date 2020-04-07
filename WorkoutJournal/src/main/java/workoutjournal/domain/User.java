@@ -13,14 +13,12 @@ public class User {
     private String username;
     private String name;
     private int age;
-    private Sex sex;
     private int maxHeartRate;
 
-    public User(String username, String name, int age, Sex sex, int maxHeartRate) {
+    public User(String username, String name, int age, int maxHeartRate) {
         this.username = username;
         this.name = name;
         this.age = age;
-        this.sex = sex;
         this.maxHeartRate = maxHeartRate;
     }
 

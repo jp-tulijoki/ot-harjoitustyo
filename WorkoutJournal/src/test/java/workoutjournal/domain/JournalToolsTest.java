@@ -34,7 +34,7 @@ public class JournalToolsTest {
         }
         this.userDAO = new UserDAO(connTest);
         this.tools = new JournalTools(userDAO);
-        tools.createUser("mikko95", "Mikko", 195, Sex.male);
+        tools.createUser("mikko95", "Mikko", 30, Sex.male);
         }
 
     
@@ -46,8 +46,8 @@ public class JournalToolsTest {
     
     @Test
     public void createUserWorksProperly() throws SQLException {
-        assertEquals(true, tools.createUser("maija90", "Maija", 182, Sex.female));
-        assertEquals(false, tools.createUser("mikko95", "Mikko", 195, Sex.male));
+        assertEquals(true, tools.createUser("maija90", "Maija", 30, Sex.female));
+        assertEquals(false, tools.createUser("mikko95", "Mikko", 25, Sex.male));
         tools.deleteUser("maija90");
         connTest.close();
     }

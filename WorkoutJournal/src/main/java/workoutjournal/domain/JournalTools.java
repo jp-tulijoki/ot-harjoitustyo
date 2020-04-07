@@ -35,7 +35,7 @@ public class JournalTools {
             if (userDAO.findUser(username)) {
                 return false;
             } else {
-                userDAO.createUser(username, name, age, sex, countMaxHeartRate(age, sex));
+                userDAO.createUser(username, name, countMaxHeartRate(age, sex));
                 return true;
             }
         } catch (SQLException ex) {
@@ -57,5 +57,19 @@ public class JournalTools {
         }
         return false;
     }
+    
+    public boolean logIn(String username) {
+        try {
+            if (userDAO.findUser(username) == false) {
+                return false;
+            } else {
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
 
 }

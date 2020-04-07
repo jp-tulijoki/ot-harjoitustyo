@@ -14,7 +14,7 @@ import workoutjournal.domain.Sex;
  *
  * @author tulijoki
  */
-public class UserDAO{
+public class UserDAO {
     
     Connection conn;
 
@@ -22,13 +22,11 @@ public class UserDAO{
         this.conn = conn;
     }
         
-    public void createUser(String username, String name, int age, Sex sex, int maxHeartRate) throws SQLException {
-        PreparedStatement p = conn.prepareStatement("INSERT INTO Users(username, name, age, sex, maxHeartRate) VALUES (?, ?, ?, ?, ?)");
+    public void createUser(String username, String name, int maxHeartRate) throws SQLException {
+        PreparedStatement p = conn.prepareStatement("INSERT INTO Users(username, name, maxHeartRate) VALUES (?, ?, ?)");
         p.setString(1, username);
         p.setString(2, name);
-        p.setInt(3, age);
-        p.setInt(4, sex.ordinal());
-        p.setInt(5, maxHeartRate);
+        p.setInt(3, maxHeartRate);
         p.executeUpdate();
     }
     
@@ -48,4 +46,14 @@ public class UserDAO{
         p.setString(1, username);
         p.executeUpdate();
     }
+    
+//    public User getUserCredentials(String username) throws SQLException {
+//        PreparedStatement p = conn.prepareStatement("SELECT id, username, name, age, maxHeartRate FROM users WHERE username = ?");
+//        p.setString(1, username);
+//        ResultSet r = p.executeQuery();
+//        if (!(r.next())) {
+//            return null;
+//        }
+//        User u = new User(r.getInt("id"), r.getString("username"), r.getString("name"), r.getInt("age"), r.getInt("maxHeartRate"));
+//    }
 }
