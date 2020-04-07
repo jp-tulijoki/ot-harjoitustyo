@@ -10,15 +10,15 @@ package workoutjournal.domain;
  * @author tulijoki
  */
 public class User {
+    private int id;
     private String username;
     private String name;
-    private int age;
     private int maxHeartRate;
 
-    public User(String username, String name, int age, int maxHeartRate) {
+    public User(int id, String username, String name, int maxHeartRate) {
+        this.id = id;
         this.username = username;
         this.name = name;
-        this.age = age;
         this.maxHeartRate = maxHeartRate;
     }
 
@@ -28,10 +28,6 @@ public class User {
 
     public String getName() {
         return name;
-    }
-
-    public int getAge() {
-        return age;
     }
 
     public int getMaxHeartRate() {

@@ -28,7 +28,7 @@ public class WorkoutJournalUI {
         } catch (SQLException ex) {
         
 
-        UserDAO userDao = new UserDAO(conn);
+        DBUserDAO userDao = new DBUserDAO(conn);
         JournalTools tools = new JournalTools(userDao);
         
         System.out.println(tools.createUser("mikko999", "Mikko", 20, Sex.male));

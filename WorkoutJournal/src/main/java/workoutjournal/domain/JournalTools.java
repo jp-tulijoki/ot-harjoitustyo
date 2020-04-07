@@ -8,17 +8,19 @@ package workoutjournal.domain;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import workoutjournal.DAO.UserDAO;
+import workoutjournal.DAO.DBUserDAO;
 import workoutjournal.domain.Sex;
+import workoutjournal.domain.User;
 
 /**
  *
  * @author tulijoki
  */
 public class JournalTools {
-    private UserDAO userDAO;
+    private DBUserDAO userDAO;
+    private User loggedIn;
 
-    public JournalTools(UserDAO userDAO) {
+    public JournalTools(DBUserDAO userDAO) {
         this.userDAO = userDAO;
     }
         
@@ -32,7 +34,7 @@ public class JournalTools {
     
     public boolean createUser(String username, String name, int age, Sex sex) {
         try {
-            if (userDAO.findUser(username)) {
+            if (!(userDAO.getUserCredentials(username) == null)) {
                 return false;
             } else {
                 userDAO.createUser(username, name, countMaxHeartRate(age, sex));
@@ -46,7 +48,7 @@ public class JournalTools {
     
     public boolean deleteUser(String username) {
         try {
-            if (userDAO.findUser(username) == false) {
+            if (userDAO.getUserCredentials(username) == null) {
                 return false;
             } else {
                 userDAO.deleteUser(username);
@@ -58,17 +60,21 @@ public class JournalTools {
         return false;
     }
     
-    public boolean logIn(String username) {
+    public boolean login(String username) {
         try {
-            if (userDAO.findUser(username) == false) {
+            if (userDAO.getUserCredentials(username) == null) {
                 return false;
-            } else {
-
             }
+            loggedIn = userDAO.getUserCredentials(username);
         } catch (SQLException ex) {
             Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
-        return false;
+        return true;
+    }
+    
+    public void logout() {
+        loggedIn = null;
     }
     
 

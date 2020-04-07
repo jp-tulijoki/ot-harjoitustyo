@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import workoutjournal.DAO.UserDAO;
+import workoutjournal.DAO.DBUserDAO;
 
 /**
  *
@@ -19,7 +19,7 @@ import workoutjournal.DAO.UserDAO;
  */
 public class JournalToolsTest {
     
-    UserDAO userDAO;
+    DBUserDAO userDAO;
     JournalTools tools;
     Connection connTest;
     
@@ -32,7 +32,7 @@ public class JournalToolsTest {
             s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, name VARCHAR NOT NULL, age INTEGER, sex INTEGER, maxHeartRate INTEGER)");
         } catch (SQLException ex) {
         }
-        this.userDAO = new UserDAO(connTest);
+        this.userDAO = new DBUserDAO(connTest);
         this.tools = new JournalTools(userDAO);
         tools.createUser("mikko95", "Mikko", 30, Sex.male);
         }
@@ -56,6 +56,13 @@ public class JournalToolsTest {
     public void deleteUserWorksProperly() throws SQLException {
         assertEquals(true, tools.deleteUser("mikko95"));
         assertEquals(false, tools.deleteUser("maija90"));
+        connTest.close();
+    }
+    
+    @Test
+    public void loginWorksProperly() throws SQLException {
+        assertEquals(true, tools.login("mikko95"));
+        assertEquals(false, tools.login("maija90"));
         connTest.close();
     }
     
