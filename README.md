@@ -18,3 +18,6 @@ Testi suoritetaan komennolla:
 
 Testiraportti generoidaan komennolla:
 `mvn test jacoco:report`
+
+Tiedostoon checkstyle.xml määritellyt tarkistukset suoritetaan komennolla:
+`mvn jxr:jxr checkstyle:checkstyle`
