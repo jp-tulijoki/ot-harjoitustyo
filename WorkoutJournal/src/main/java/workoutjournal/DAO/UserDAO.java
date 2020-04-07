@@ -14,10 +14,16 @@ import workoutjournal.domain.Sex;
  *
  * @author tulijoki
  */
-public class UserDAO extends DAO {
+public class UserDAO{
+    
+    Connection conn;
+
+    public UserDAO(Connection conn) {
+        this.conn = conn;
+    }
         
     public void createUser(String username, String name, int age, Sex sex, int maxHeartRate) throws SQLException {
-        p = conn.prepareStatement("INSERT INTO Users(username, name, age, sex, maxHeartRate) VALUES (?, ?, ?, ?, ?)");
+        PreparedStatement p = conn.prepareStatement("INSERT INTO Users(username, name, age, sex, maxHeartRate) VALUES (?, ?, ?, ?, ?)");
         p.setString(1, username);
         p.setString(2, name);
         p.setInt(3, age);
@@ -27,7 +33,7 @@ public class UserDAO extends DAO {
     }
     
     public boolean findUser(String username) throws SQLException {
-        p = conn.prepareStatement("SELECT username FROM Users WHERE username = ?");
+        PreparedStatement p = conn.prepareStatement("SELECT username FROM Users WHERE username = ?");
         p.setString(1, username);
         ResultSet r = p.executeQuery();
         if (r.next()) {
@@ -38,7 +44,7 @@ public class UserDAO extends DAO {
     }
     
     public void deleteUser(String username) throws SQLException {
-        p = conn.prepareStatement("DELETE FROM Users WHERE username = ?");
+        PreparedStatement p = conn.prepareStatement("DELETE FROM Users WHERE username = ?");
         p.setString(1, username);
         p.executeUpdate();
     }

@@ -6,11 +6,11 @@ package workoutjournal.domain;
  * and open the template in the editor.
  */
 
+import java.sql.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import workoutjournal.DAO.DAO;
 import workoutjournal.DAO.UserDAO;
 
 /**
@@ -19,14 +19,24 @@ import workoutjournal.DAO.UserDAO;
  */
 public class JournalToolsTest {
     
+    UserDAO userDAO;
     JournalTools tools;
+    Connection connTest;
     
     @Before
-    public void setUp() {
-        this.tools = new JournalTools(new DAO(), new UserDAO());
+    public void setUp() throws SQLException {
+        
+        this.connTest = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
+        Statement s = connTest.createStatement();
+        try {
+            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, name VARCHAR NOT NULL, age INTEGER, sex INTEGER, maxHeartRate INTEGER)");
+        } catch (SQLException ex) {
+        }
+        this.userDAO = new UserDAO(connTest);
+        this.tools = new JournalTools(userDAO);
         tools.createUser("mikko95", "Mikko", 195, Sex.male);
-        tools.closeDatabaseConnection();
-    }
+        }
+
     
     @Test
     public void countMaxHeartRateWorksProperly() {
@@ -35,19 +45,18 @@ public class JournalToolsTest {
     }
     
     @Test
-    public void createUserWorksProperly() {
-        tools.getDatabaseConnection();
+    public void createUserWorksProperly() throws SQLException {
         assertEquals(true, tools.createUser("maija90", "Maija", 182, Sex.female));
         assertEquals(false, tools.createUser("mikko95", "Mikko", 195, Sex.male));
         tools.deleteUser("maija90");
-        tools.closeDatabaseConnection();
+        connTest.close();
     }
     
     @Test
-    public void deleteUserWorksProperly() {
-        tools.getDatabaseConnection();
+    public void deleteUserWorksProperly() throws SQLException {
         assertEquals(true, tools.deleteUser("mikko95"));
         assertEquals(false, tools.deleteUser("maija90"));
-        tools.closeDatabaseConnection();
+        connTest.close();
     }
+    
 }

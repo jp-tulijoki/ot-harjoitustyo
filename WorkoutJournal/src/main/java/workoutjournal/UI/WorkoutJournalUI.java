@@ -4,6 +4,12 @@
  * and open the template in the editor.
  */
 package workoutjournal.UI;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import workoutjournal.DAO.*;
 import workoutjournal.domain.*;
 
@@ -13,16 +19,25 @@ import workoutjournal.domain.*;
  */
 public class WorkoutJournalUI {
     
-    public static void main(String[] args) {
-        DAO DAO = new DAO();
-        UserDAO userDao = new UserDAO();
-        JournalTools tools = new JournalTools(DAO, userDao);
+    public static void main(String[] args) throws SQLException {
         
-        System.out.println(tools.createUser("mikko", "Mikko", 20, Sex.male));
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
+        Statement s = conn.createStatement();
+        try {
+            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, name VARCHAR NOT NULL, age INTEGER, sex INTEGER, maxHeartRate INTEGER)");
+        } catch (SQLException ex) {
+        
+
+        UserDAO userDao = new UserDAO(conn);
+        JournalTools tools = new JournalTools(userDao);
+        
+        System.out.println(tools.createUser("mikko999", "Mikko", 20, Sex.male));
         System.out.println(tools.countMaxHeartRate(30, Sex.female));
         System.out.println(tools.countMaxHeartRate(50, Sex.male));
         System.out.println(tools.deleteUser("maija90"));
-        tools.closeDatabaseConnection();
         
+        conn.close();
+
+        }
     }
 }
