@@ -11,7 +11,7 @@ Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensis
 ### Komentorivitoiminnot
 
 Projektin koodi suoritetaan komennolla:
-`mvn compile exec:java -Dexec.mainClass=workoutjournal.UI.WorkoutJournalUI`
+`mvn compile exec:java -Dexec.mainClass=Main.Main`
 
 Testi suoritetaan komennolla:
 `mvn test`
