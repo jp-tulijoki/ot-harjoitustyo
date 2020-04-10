@@ -4,4 +4,5 @@ pvm | tunnit | tehdyt asiat
 30.3. | 5 | projektin luominen ja työn aloitus
 31.3. | 6 | metodit käyttäjän lisäämiseen, poistoon ja sykkeen laskemiseen ja perusmäärittelyt tietokannalle
 7.4. | 11 | rakenteen selkiyttäminen, metodit kirjautumisiin, lisää testejä, pakkauskaavio
-yhteensä | 24 | 
+10.4 | 5 | pom.xml javafx-configuraatio ja käyttöliittymän rakentamisen aloittaminen
+yhteensä | 29 | 
