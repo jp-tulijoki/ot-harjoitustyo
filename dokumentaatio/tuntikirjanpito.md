@@ -5,4 +5,5 @@ pvm | tunnit | tehdyt asiat
 31.3. | 6 | metodit käyttäjän lisäämiseen, poistoon ja sykkeen laskemiseen ja perusmäärittelyt tietokannalle
 7.4. | 11 | rakenteen selkiyttäminen, metodit kirjautumisiin, lisää testejä, pakkauskaavio
 10.4 | 5 | pom.xml javafx-configuraatio ja käyttöliittymän rakentamisen aloittaminen
-yhteensä | 29 | 
+11.4. | 3 | kirjautumisen ja käyttäjätunnuksen luonnin perusversio
+yhteensä | 32 | 
