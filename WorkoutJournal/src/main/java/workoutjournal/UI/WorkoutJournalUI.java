@@ -155,8 +155,6 @@ public class WorkoutJournalUI extends Application {
             maxHeartRateInput.setValue(tools.countMaxHeartRate(ageInput.getValue(), sexes.getValue()));
         });
         
-        
-        
         createNewUserButton.setOnAction((event) -> {
             if (tools.createUser(setUsernameInput.getText(), setPasswordInput.getText(), maxHeartRateInput.getValue())) {
                 loginInstruction.setText("New user created succesfully. You may now log in.");
@@ -177,7 +175,6 @@ public class WorkoutJournalUI extends Application {
     }
     
     public static void main(String[] args) throws SQLException {
-        
         
         launch(WorkoutJournalUI.class);
         

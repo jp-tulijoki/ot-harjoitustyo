@@ -12,13 +12,13 @@ package workoutjournal.domain;
 public class User {
     private int id;
     private String username;
-    private String name;
+    private String password;
     private int maxHeartRate;
 
     public User(int id, String username, String name, int maxHeartRate) {
         this.id = id;
         this.username = username;
-        this.name = name;
+        this.password = password;
         this.maxHeartRate = maxHeartRate;
     }
 
@@ -26,8 +26,8 @@ public class User {
         return username;
     }
 
-    public String getName() {
-        return name;
+    public String getPassword() {
+        return password;
     }
 
     public int getMaxHeartRate() {
