@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import workoutjournal.DAO.UserDAO;
 //import workoutjournal.DAO.DBUserDAO;
-import workoutjournal.domain.Sex;
 import workoutjournal.domain.User;
 
 /**
@@ -25,20 +24,20 @@ public class JournalTools {
         this.userDAO = userDAO;
     }
         
-    public int countMaxHeartRate(int age, Sex sex) {
-        if (sex == Sex.female) {
+    public int countMaxHeartRate(int age, String sex) {
+        if (sex.equals("female")) {
             return 206 - Integer.valueOf((int) (0.8 * age));
         } else {
             return 220 - age;
         }
     }
     
-    public boolean createUser(String username, String name, int age, Sex sex) {
+    public boolean createUser(String username, String password, int maxHeartRate) {
         try {
             if (!(userDAO.getUserCredentials(username) == null)) {
                 return false;
             } else {
-                userDAO.createUser(username, name, countMaxHeartRate(age, sex));
+                userDAO.createUser(username, password, maxHeartRate);
                 return true;
             }
         } catch (SQLException ex) {

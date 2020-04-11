@@ -29,25 +29,25 @@ public class JournalToolsTest {
         this.connTest = DriverManager.getConnection("jdbc:sqlite:testdatabase.db");
         Statement s = connTest.createStatement();
         try {
-            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, name VARCHAR NOT NULL, age INTEGER, sex INTEGER, maxHeartRate INTEGER)");
+            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password TEXT, maxHeartRate INTEGER)");
         } catch (SQLException ex) {
         }
         this.userDAO = new DBUserDAO(connTest);
         this.tools = new JournalTools(userDAO);
-        tools.createUser("mikko95", "Mikko", 30, Sex.male);
+        tools.createUser("mikko95", "mikonsalasana", 195);
         }
 
     
     @Test
     public void countMaxHeartRateWorksProperly() {
-        assertEquals(190, tools.countMaxHeartRate(30, Sex.male));
-        assertEquals(174, tools.countMaxHeartRate(40, Sex.female));
+        assertEquals(190, tools.countMaxHeartRate(30, "male"));
+        assertEquals(174, tools.countMaxHeartRate(40, "female"));
     }
     
     @Test
     public void createUserWorksProperly() throws SQLException {
-        assertEquals(true, tools.createUser("maija90", "Maija", 30, Sex.female));
-        assertEquals(false, tools.createUser("mikko95", "Mikko", 25, Sex.male));
+        assertEquals(true, tools.createUser("maija90", "maijansalasana", 182));
+        assertEquals(false, tools.createUser("mikko95", "mikonsalasana", 195));
         tools.deleteUser("maija90");
         connTest.close();
     }

@@ -14,7 +14,7 @@ import workoutjournal.domain.User;
  */
 public interface UserDAO {
     
-    void createUser(String username, String name, int maxHeartRate) throws SQLException;
+    void createUser(String username, String password, int maxHeartRate) throws SQLException;
     void deleteUser(String username) throws SQLException;
     User getUserCredentials(String username) throws SQLException; 
     

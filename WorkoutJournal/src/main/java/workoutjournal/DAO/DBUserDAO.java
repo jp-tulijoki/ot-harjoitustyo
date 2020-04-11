@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import workoutjournal.domain.User;
-import workoutjournal.domain.Sex;
 
 /**
  *
@@ -23,10 +22,10 @@ public class DBUserDAO implements UserDAO {
     }
         
     @Override
-    public void createUser(String username, String name, int maxHeartRate) throws SQLException {
-        PreparedStatement p = conn.prepareStatement("INSERT INTO Users(username, name, maxHeartRate) VALUES (?, ?, ?)");
+    public void createUser(String username, String password, int maxHeartRate) throws SQLException {
+        PreparedStatement p = conn.prepareStatement("INSERT INTO Users(username, password, maxHeartRate) VALUES (?, ?, ?)");
         p.setString(1, username);
-        p.setString(2, name);
+        p.setString(2, password);
         p.setInt(3, maxHeartRate);
         p.executeUpdate();
     }
@@ -38,13 +37,13 @@ public class DBUserDAO implements UserDAO {
     }
     
     public User getUserCredentials(String username) throws SQLException {
-        PreparedStatement p = conn.prepareStatement("SELECT id, username, name, maxHeartRate FROM users WHERE username = ?");
+        PreparedStatement p = conn.prepareStatement("SELECT id, username, password, maxHeartRate FROM users WHERE username = ?");
         p.setString(1, username);
         ResultSet r = p.executeQuery();
         if (!(r.next())) {
             return null;
         }
-        User user = new User(r.getInt("id"), r.getString("username"), r.getString("name"), r.getInt("maxHeartRate"));
+        User user = new User(r.getInt("id"), r.getString("username"), r.getString("password"), r.getInt("maxHeartRate"));
         return user;
     }
 }
