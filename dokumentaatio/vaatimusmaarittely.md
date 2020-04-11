@@ -6,13 +6,13 @@ Aluksi sovelluksella on ainoastaan yksi käyttäjärooli eli normaali käyttäj�
 ## Perusversion tarjoama toiminnallisuus
 ### Ennen kirjautumista
 * käyttäjä voi luoda järjestelmään käyttäjätunnuksen
-  * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä
-  * lisäksi on asetettava salasana
-  * käyttäjätunnuksen luonnin yhteydessä luodaan käyttäjäprofiili ja asetetaan tarpeelliset tiedot (ainakin nimi ja maksimisyke) TEHTY
+  * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä TEHTY OSITTAIN
+  * lisäksi on asetettava salasana TEHTY (Ei toistaiseksi kryptausta.)
+  * käyttäjätunnuksen luonnin yhteydessä asetetaan maksimisyke, jonka voi asettaa suoraan tai laskea laskurilla TEHTY
 * käyttäjä voi kirjautua järjestelmään
-  * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana
-  * käyttäjän tietojen olemassaolo tarkistetaan ja käyttäjätiedot haetaan tietokannasta TEHTY
-  * jos käyttäjää ei ole olemassa, järjestelmä ilmoittaa tästä
+  * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana TEHTY
+  * käyttäjän tietojen olemassaolo tarkistetaan ja käyttäjätiedot haetaan tietokannasta TEHTY OSITTAIN
+  * jos kirjautumistiedot ovat puutteelliset, järjestelmä ilmoittaa tästä TEHTY
 ### Kirjautumisen jälkeen
 * käyttäjä voi halutessaan muokata käyttäjäprofiiliaan
 * käyttäjä voi lisätä uuden liikuntasuorituksen
