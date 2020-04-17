@@ -6,10 +6,11 @@
 package workoutjournal.domain;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import workoutjournal.DAO.UserDAO;
-//import workoutjournal.DAO.DBUserDAO;
+import workoutjournal.DAO.ExerciseDAO;
 import workoutjournal.domain.User;
 
 /**
@@ -18,10 +19,12 @@ import workoutjournal.domain.User;
  */
 public class JournalTools {
     private UserDAO userDAO;
+    private ExerciseDAO exerciseDAO;
     private User loggedIn;
 
-    public JournalTools(UserDAO userDAO) {
+    public JournalTools(UserDAO userDAO, ExerciseDAO exerciseDAO) {
         this.userDAO = userDAO;
+        this.exerciseDAO = exerciseDAO;
     }
         
     public int countMaxHeartRate(int age, String sex) {
@@ -81,4 +84,13 @@ public class JournalTools {
         return loggedIn;
     }
 
+    public boolean addExercise(int user_id, LocalDate date, int type, Integer duration, Integer length, Integer avgHeartRate, String description) {
+        try {
+            exerciseDAO.addExercise(user_id, date, type, duration, length, avgHeartRate, description);
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }

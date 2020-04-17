@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -36,18 +37,23 @@ public class WorkoutJournalUI extends Application {
     
     private Connection conn;
     private UserDAO userDAO;
+    private ExerciseDAO exerciseDAO; 
     private JournalTools tools;
     
     public void init() throws SQLException {
         
-        conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
+        this.conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
         Statement s = conn.createStatement();
         try {
             s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password TEXT, maxHeartRate INTEGER)");
+            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, length INTEGER, avgHeartRate INTEGER, description TEXT)");
         } catch (SQLException ex) {
         }
-        userDAO = new DBUserDAO(conn);
-        tools = new JournalTools(userDAO);
+        this.userDAO = new DBUserDAO(conn);
+        this.exerciseDAO = new DBExerciseDAO(conn);
+        
+        this.tools = new JournalTools(userDAO, exerciseDAO);
+        tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
     }
     
     public void start(Stage stage) {
