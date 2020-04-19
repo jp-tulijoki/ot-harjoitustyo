@@ -32,7 +32,7 @@ public class JournalToolsTest {
         Statement s = connTest.createStatement();
         try {
             s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password TEXT, maxHeartRate INTEGER)");
-            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, length INTEGER, avgHeartRate INTEGER, description TEXT)");
+            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, distance INTEGER, avgHeartRate INTEGER, description TEXT)");
         } catch (SQLException ex) {
         }
         this.userDAO = new DBUserDAO(connTest);

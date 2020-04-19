@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -17,13 +18,23 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import workoutjournal.DAO.*;
@@ -40,13 +51,13 @@ public class WorkoutJournalUI extends Application {
     private ExerciseDAO exerciseDAO; 
     private JournalTools tools;
     
-    public void init() throws SQLException {
+    public void init() throws SQLException, Exception {
         
         this.conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
         Statement s = conn.createStatement();
         try {
             s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password TEXT, maxHeartRate INTEGER)");
-            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, length INTEGER, avgHeartRate INTEGER, description TEXT)");
+            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, distance INTEGER, avgHeartRate INTEGER, description TEXT)");
         } catch (SQLException ex) {
         }
         this.userDAO = new DBUserDAO(conn);
@@ -56,7 +67,7 @@ public class WorkoutJournalUI extends Application {
         tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
     }
     
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         
         // Login scene
         
@@ -111,7 +122,6 @@ public class WorkoutJournalUI extends Application {
         Label sex = new Label("Sex");
         ChoiceBox<String> sexes = new ChoiceBox();
         sexes.getItems().addAll("female", "male");
-        sexes.getValue();
         Button countMaxHeartRateButton = new Button("Count max heart rate");
         Button createNewUserButton = new Button("Create new user");
         Label userCreationError = new Label("");
@@ -136,9 +146,71 @@ public class WorkoutJournalUI extends Application {
         
         // Primary scene
         
-        GridPane primaryPane = new GridPane();
+        BorderPane primaryPane = new BorderPane();
+        primaryPane.setPrefSize(720, 360);
         
-        primaryPane.add(new Label("Welcome!"), 0, 0);
+        MenuBar actionsMenu = new MenuBar();
+        
+        Menu settings = new Menu("Settings");
+        MenuItem profile = new MenuItem("Profile");
+        MenuItem logout = new MenuItem("Log out");
+        settings.getItems().addAll(profile, logout);
+        
+        Menu exercises = new Menu("Exercises");
+        MenuItem addExercise = new MenuItem("Add exercise");
+        MenuItem previousExercises = new MenuItem("Previous exercises");
+        MenuItem summary = new MenuItem("Summary");
+        exercises.getItems().addAll(addExercise, previousExercises, summary);
+        
+        GridPane addExercisePane = new GridPane();
+        
+        Label addExerciseLabel = new Label("Add new exercise");
+        Label dateLabel = new Label("Date:");
+        DatePicker datePicker = new DatePicker();
+        Label typeLabel = new Label("Type:");
+        ChoiceBox<String> types = new ChoiceBox();
+        types.getItems().addAll("endurance", "strength");
+        Label durationLabel = new Label("Duration (minutes):");
+        IntegerField durationInput = new IntegerField();
+        Label distanceLabel = new Label("Distance (kilometers):");
+        IntegerField distanceInput = new IntegerField();
+        Label avgHeartRateLabel = new Label("Average heart rate:");
+        IntegerField avgHeartRateInput = new IntegerField();
+        Label descriptionLabel = new Label("Description:");
+        TextField descriptionInput = new TextField();
+        Button addExerciseButton = new Button("Add exercise");
+        Label addExerciseConfirmation = new Label("");
+        
+        addExercisePane.add(addExerciseLabel, 0, 0);
+        addExercisePane.add(dateLabel, 0, 1);
+        addExercisePane.add(datePicker, 1, 1);
+        addExercisePane.add(typeLabel, 0, 2);
+        addExercisePane.add(types, 1, 2);
+        addExercisePane.add(durationLabel, 0, 3);
+        addExercisePane.add(durationInput, 1, 3);
+        addExercisePane.add(distanceLabel, 0, 4);
+        addExercisePane.add(distanceInput, 1, 4);
+        addExercisePane.add(avgHeartRateLabel, 0, 5);
+        addExercisePane.add(avgHeartRateInput, 1, 5);
+        addExercisePane.add(descriptionLabel, 0, 6);
+        addExercisePane.add(descriptionInput, 1, 6);
+        addExercisePane.add(addExerciseButton, 1, 7);
+        addExercisePane.add(addExerciseConfirmation, 0, 8);
+        
+        // Menu actions
+        
+        logout.setOnAction((event) -> {
+            tools.logout();
+            stage.setScene(loginScene);
+        });
+        
+        addExercise.setOnAction((event) -> {
+            primaryPane.setCenter(addExercisePane);
+        });
+        
+        actionsMenu.getMenus().addAll(settings, exercises);
+        
+        primaryPane.setTop(actionsMenu);
         
         Scene primaryScene = new Scene(primaryPane);
         
@@ -172,6 +244,23 @@ public class WorkoutJournalUI extends Application {
             }
         });
         
+        addExerciseButton.setOnAction((event) -> {
+            int type = 1;
+            if (types.getValue().equals("strength")) {
+                type = 2;
+            }
+            try {
+                tools.addExercise(tools.getLoggedUser().getId(), datePicker.getValue(), type, durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            addExerciseConfirmation.setText("Exercise added succesfully");
+            durationInput.setValue(0);
+            distanceInput.setValue(0);
+            avgHeartRateInput.setValue(0);
+            descriptionInput.clear();
+        });
+        
         stage.setScene(loginScene);
         stage.show();
     }
@@ -180,16 +269,28 @@ public class WorkoutJournalUI extends Application {
         conn.close();
     }
     
+    public BarChart<String, Number> drawOneWeek(ArrayList<Exercise> exerciseList, LocalDate dateFrom, LocalDate dateTo) {
+        CategoryAxis dates = new CategoryAxis();
+        NumberAxis duration = new NumberAxis();
+        BarChart<String, Number> oneWeek = new BarChart<>(dates, duration);
+        
+        oneWeek.setTitle("Exercises " + dateFrom.toString() + " - " + dateTo.toString());
+        oneWeek.setLegendVisible(false);
+        XYChart.Series exercises = new XYChart.Series();
+        
+        try {
+            for (Exercise exercise : exerciseList) {
+                exercises.getData().add(new XYChart.Data(exercise.getDate().toString(), exercise.getDuration()));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        oneWeek.getData().add(exercises);
+        return oneWeek;
+    }
+    
     public static void main(String[] args) throws SQLException {
         
         launch(WorkoutJournalUI.class);
-        
-
-
-        
-    
-    
-
-    
     }   
 }

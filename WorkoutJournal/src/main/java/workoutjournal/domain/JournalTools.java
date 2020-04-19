@@ -7,6 +7,7 @@ package workoutjournal.domain;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import workoutjournal.DAO.UserDAO;
@@ -84,13 +85,18 @@ public class JournalTools {
         return loggedIn;
     }
 
-    public boolean addExercise(int user_id, LocalDate date, int type, Integer duration, Integer length, Integer avgHeartRate, String description) {
+    public boolean addExercise(int user_id, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws Exception{
         try {
-            exerciseDAO.addExercise(user_id, date, type, duration, length, avgHeartRate, description);
+            exerciseDAO.addExercise(user_id, date, type, duration, distance, avgHeartRate, description);
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
+    
+    public ArrayList<Exercise> getOneWeeksExercises(LocalDate dateFrom, LocalDate dateTo) throws Exception {
+        return exerciseDAO.getExercises(loggedIn.getId(), dateFrom, dateTo);
+    }
+    
 }

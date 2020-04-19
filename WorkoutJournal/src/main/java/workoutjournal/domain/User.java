@@ -22,6 +22,10 @@ public class User {
         this.maxHeartRate = maxHeartRate;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getUsername() {
         return username;
     }

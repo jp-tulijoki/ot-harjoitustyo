@@ -6,6 +6,8 @@
 package workoutjournal.DAO;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import workoutjournal.domain.Exercise;
 
 /**
  *
@@ -13,6 +15,6 @@ import java.time.LocalDate;
  */
 public interface ExerciseDAO {
     
-    void addExercise(int user_id, LocalDate date, int type, Integer duration, Integer length, Integer avgHeartRate, String description) throws SQLException;
-    
+    void addExercise(int user_id, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws Exception;
+    ArrayList<Exercise> getExercises(int user_id, LocalDate fromDate, LocalDate toDate) throws Exception;    
 }
