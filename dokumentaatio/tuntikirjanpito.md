@@ -7,4 +7,5 @@ pvm | tunnit | tehdyt asiat
 10.4 | 5 | pom.xml javafx-configuraatio ja käyttöliittymän rakentamisen aloittaminen
 11.4. | 3 | kirjautumisen ja käyttäjätunnuksen luonnin perusversio
 17.4. | 2 | toiminto harjoituksen lisäämiseen ja testit siihen
-yhteensä | 34 | 
+19.4. | 5 | käyttöliittymää ja harjoitteisiin liittyviä toimintoja eteenpäin
+yhteensä | 39 | 
