@@ -99,4 +99,19 @@ public class JournalTools {
         return exerciseDAO.getExercises(loggedIn.getId(), dateFrom, dateTo);
     }
     
+    public String countIntensityLevel(Exercise exercise) {
+        if (exercise.getType() == 2) {
+            return "black";
+        }
+        int intensity = 100 * exercise.getAvgHeartRate() / loggedIn.getMaxHeartRate();
+        if (intensity < 75) {
+            return "green";
+        } else if (intensity < 85) {
+            return "yellow";
+        } else if (intensity < 95) {
+            return "orange";
+        } else {
+            return "red";
+        }
+    }
 }

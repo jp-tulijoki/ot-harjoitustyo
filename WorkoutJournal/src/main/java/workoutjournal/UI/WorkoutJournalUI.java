@@ -9,9 +9,14 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import static java.time.DayOfWeek.MONDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import java.time.LocalDate;
 import java.time.Month;
+import static java.time.temporal.TemporalAdjusters.nextOrSame;
+import static java.time.temporal.TemporalAdjusters.previousOrSame;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -41,6 +46,7 @@ import javafx.stage.Stage;
 import javafx.css.*;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart.Data;
+import javafx.scene.control.Tooltip;
 import workoutjournal.DAO.*;
 import workoutjournal.domain.*;
 
@@ -54,7 +60,7 @@ public class WorkoutJournalUI extends Application {
     private UserDAO userDAO;
     private ExerciseDAO exerciseDAO; 
     private JournalTools tools;
-    private LocalDate date;
+    private LocalDate today;
     
     public void init() throws SQLException, Exception {
         
@@ -69,7 +75,7 @@ public class WorkoutJournalUI extends Application {
         this.exerciseDAO = new DBExerciseDAO(conn);
         
         this.tools = new JournalTools(userDAO, exerciseDAO);
-        this.date = LocalDate.now();
+        this.today = LocalDate.now();
     }
     
     public void start(Stage stage) throws Exception {
@@ -221,11 +227,14 @@ public class WorkoutJournalUI extends Application {
         
         // Actions for buttons
         
+        
         loginButton.setOnAction((event) -> {
             String username = usernameInput.getText();
             if (tools.login(username)) {
                 try {
-                    BarChart <String, Number> oneWeek = drawOneWeek(tools.getOneWeeksExercises(date.minusWeeks(1), date), date.minusWeeks(1), date);
+                    LocalDate monday = today.with(previousOrSame(MONDAY));
+                    LocalDate sunday = today.with(nextOrSame(SUNDAY));
+                    BarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
                     primaryPane.setCenter(oneWeek);
                     stage.setScene(primaryScene);
                 } catch (Exception ex) {
@@ -280,28 +289,48 @@ public class WorkoutJournalUI extends Application {
         conn.close();
     }
     
-    public static BarChart<String, Number> drawOneWeek(ArrayList<Exercise> exerciseList, LocalDate dateFrom, LocalDate dateTo) {
+    public BarChart<String, Number> drawOneWeek(LocalDate monday, LocalDate sunday) throws Exception {
         
+        String[] weekdays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+        LocalDate date = monday;
+        ArrayList<Exercise> exercisesOfTheWeek = tools.getOneWeeksExercises(monday, sunday);
+        int[] durations = new int[7];
+        String[] intensityLevels = new String[7];
+        int c = 0;
+        while (date.isBefore(sunday) || date.isEqual(sunday)) {
+            for (Exercise exercise : exercisesOfTheWeek) {
+                if (exercise.getDate().equals(date)) {
+                    durations[c] = exercise.getDuration();
+                    intensityLevels[c] = tools.countIntensityLevel(exercise);
+                } 
+            }
+            c++;
+            date = date.plusDays(1);
+        }
+       
         CategoryAxis dates = new CategoryAxis();
         dates.setLabel("Date");
         NumberAxis duration = new NumberAxis();
         duration.setLabel("Duration (minutes)");
         BarChart<String, Number> oneWeek = new BarChart<>(dates, duration);
         
-        oneWeek.setTitle("Exercises " + dateFrom.toString() + " - " + dateTo.toString());
+        oneWeek.setTitle("Exercises " + monday.toString() + " - " + sunday.toString());
         oneWeek.setLegendVisible(false);
-        XYChart.Series exercises = new XYChart.Series();
+        XYChart.Series exerciseChart = new XYChart.Series();
         
-        try {
-            for (Exercise exercise : exerciseList) {
-                XYChart.Data data = new XYChart.Data<>(exercise.getDate().toString(), exercise.getDuration());
-                exercises.getData().add(data);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; i < 7; i++) {
+            XYChart.Data item = new XYChart.Data<>(weekdays[i], durations[i]);
+            exerciseChart.getData().add(item);
         }
         
-        oneWeek.getData().add(exercises);
+        c = 0;
+        oneWeek.getData().add(exerciseChart);
+        for (Node n : oneWeek.lookupAll(".default-color0.chart-bar")) {
+            if (intensityLevels[c] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c]);
+            }
+            c++;
+        }
         return oneWeek;
     }
     
