@@ -73,7 +73,7 @@ public class JournalToolsTest {
     }
     
     @Test
-    public void addExerciseWorksProperly() throws SQLException {
+    public void addExerciseWorksProperly() throws SQLException, Exception {
         assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
         connTest.close();
     }

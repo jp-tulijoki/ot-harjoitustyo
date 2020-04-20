@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +38,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.css.*;
+import javafx.scene.Node;
+import javafx.scene.chart.XYChart.Data;
 import workoutjournal.DAO.*;
 import workoutjournal.domain.*;
 
@@ -50,6 +54,7 @@ public class WorkoutJournalUI extends Application {
     private UserDAO userDAO;
     private ExerciseDAO exerciseDAO; 
     private JournalTools tools;
+    private LocalDate date;
     
     public void init() throws SQLException, Exception {
         
@@ -64,7 +69,7 @@ public class WorkoutJournalUI extends Application {
         this.exerciseDAO = new DBExerciseDAO(conn);
         
         this.tools = new JournalTools(userDAO, exerciseDAO);
-        tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
+        this.date = LocalDate.now();
     }
     
     public void start(Stage stage) throws Exception {
@@ -219,7 +224,13 @@ public class WorkoutJournalUI extends Application {
         loginButton.setOnAction((event) -> {
             String username = usernameInput.getText();
             if (tools.login(username)) {
-                stage.setScene(primaryScene);
+                try {
+                    BarChart <String, Number> oneWeek = drawOneWeek(tools.getOneWeeksExercises(date.minusWeeks(1), date), date.minusWeeks(1), date);
+                    primaryPane.setCenter(oneWeek);
+                    stage.setScene(primaryScene);
+                } catch (Exception ex) {
+                    Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 loginError.setText("Invalid credentials.");
             }
@@ -269,9 +280,12 @@ public class WorkoutJournalUI extends Application {
         conn.close();
     }
     
-    public BarChart<String, Number> drawOneWeek(ArrayList<Exercise> exerciseList, LocalDate dateFrom, LocalDate dateTo) {
+    public static BarChart<String, Number> drawOneWeek(ArrayList<Exercise> exerciseList, LocalDate dateFrom, LocalDate dateTo) {
+        
         CategoryAxis dates = new CategoryAxis();
+        dates.setLabel("Date");
         NumberAxis duration = new NumberAxis();
+        duration.setLabel("Duration (minutes)");
         BarChart<String, Number> oneWeek = new BarChart<>(dates, duration);
         
         oneWeek.setTitle("Exercises " + dateFrom.toString() + " - " + dateTo.toString());
@@ -280,11 +294,13 @@ public class WorkoutJournalUI extends Application {
         
         try {
             for (Exercise exercise : exerciseList) {
-                exercises.getData().add(new XYChart.Data(exercise.getDate().toString(), exercise.getDuration()));
+                XYChart.Data data = new XYChart.Data<>(exercise.getDate().toString(), exercise.getDuration());
+                exercises.getData().add(data);
             }
         } catch (Exception ex) {
             Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         oneWeek.getData().add(exercises);
         return oneWeek;
     }

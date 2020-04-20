@@ -25,7 +25,7 @@ public class DBExerciseDAO implements ExerciseDAO {
     @Override
     public void addExercise(int user_id, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws SQLException {
         Date sqlDate = Date.valueOf(date);
-        PreparedStatement p = conn.prepareStatement("INSERT INTO Exercises(date, user_id, type, distance, distance, avgHeartRate, description) VALUES(?, ?, ?, ?, ?, ?, ?)");
+        PreparedStatement p = conn.prepareStatement("INSERT INTO Exercises(user_id, date, type, duration, distance, avgHeartRate, description) VALUES(?, ?, ?, ?, ?, ?, ?)");
         p.setInt(1, user_id);
         p.setObject(2, date);
         p.setInt(3, type);
@@ -39,15 +39,13 @@ public class DBExerciseDAO implements ExerciseDAO {
     @Override
     public ArrayList<Exercise> getExercises(int user_id, LocalDate fromDate, LocalDate toDate) throws SQLException {
         ArrayList<Exercise> exercises = new ArrayList();
-        Date sqlFromDate = Date.valueOf(fromDate);
-        Date sqlToDate = Date.valueOf(toDate);
         PreparedStatement p = conn.prepareStatement("SELECT * FROM Exercises WHERE user_id = ? AND date BETWEEN ? AND ?");
         p.setInt(1, user_id);
-        p.setObject(2, sqlFromDate);
-        p.setObject(3, sqlToDate);
+        p.setString(2, fromDate + "");
+        p.setString(3, toDate + "");
         ResultSet r = p.executeQuery();
         while (r.next()) {
-            exercises.add(new Exercise(user_id, r.getDate("date").toLocalDate(), r.getInt("type"), r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
+            exercises.add(new Exercise(user_id, LocalDate.parse(r.getString("date")), r.getInt("type"), r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
         }
         return exercises;
     }
