@@ -7,16 +7,16 @@ Aluksi sovelluksella on ainoastaan yksi käyttäjärooli eli normaali käyttäj�
 ### Ennen kirjautumista
 * käyttäjä voi luoda järjestelmään käyttäjätunnuksen
   * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä TEHTY OSITTAIN
-  * lisäksi on asetettava salasana TEHTY (Ei toistaiseksi kryptausta.)
+  * lisäksi on asetettava salasana TEHTY OSITTAIN (Ei toistaiseksi kryptausta.)
   * käyttäjätunnuksen luonnin yhteydessä asetetaan maksimisyke, jonka voi asettaa suoraan tai laskea laskurilla TEHTY
 * käyttäjä voi kirjautua järjestelmään
-  * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana TEHTY
-  * käyttäjän tietojen olemassaolo tarkistetaan ja käyttäjätiedot haetaan tietokannasta TEHTY OSITTAIN
+  * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana TEHTY OSITTAIN (Ei salasanan tarkistusta.)
+  * käyttäjän tietojen olemassaolo tarkistetaan ja käyttäjätiedot haetaan tietokannasta TEHTY
   * jos kirjautumistiedot ovat puutteelliset, järjestelmä ilmoittaa tästä TEHTY
 ### Kirjautumisen jälkeen
 * käyttäjä voi halutessaan muokata käyttäjäprofiiliaan
-* käyttäjä voi lisätä uuden liikuntasuorituksen
-* käyttäjä näkee perusnäkymässä kuluvan viikon harjoittelun
+* käyttäjä voi lisätä uuden liikuntasuorituksen TEHTY
+* käyttäjä näkee perusnäkymässä kuluvan viikon harjoittelun TEHTY
 * käyttäjä voi myös tarkastella aiempia suorituksiaan
 * käyttäjä voi tarkastella yhteenvetoa harjoittelustaan valitsemallaan ajanjaksolla
   * yhteenveto tarjoaa tietoa harjoittelumääristä, harjoittelun jakautumisesta eri syketasoille sekä määrien ja vauhdin kehittymisestä
