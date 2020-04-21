@@ -1,62 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package workoutjournal.UI;
+package workoutjournal.ui;
+import workoutjournal.dao.ExerciseDAO;
+import workoutjournal.dao.DBUserDAO;
+import workoutjournal.dao.UserDAO;
+import workoutjournal.dao.DBExerciseDAO;
 import com.sun.javafx.charts.Legend;
 import com.sun.javafx.scene.control.IntegerField;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import static java.time.DayOfWeek.MONDAY;
-import static java.time.DayOfWeek.SUNDAY;
+import java.sql.*;
+import static java.time.DayOfWeek.*;
 import java.time.LocalDate;
-import java.time.Month;
-import static java.time.temporal.TemporalAdjusters.nextOrSame;
-import static java.time.temporal.TemporalAdjusters.previousOrSame;
+import static java.time.temporal.TemporalAdjusters.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.css.*;
 import javafx.scene.Node;
-import javafx.scene.chart.XYChart.Data;
-import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import workoutjournal.DAO.*;
 import workoutjournal.domain.*;
 
-/**
- *
- * @author tulijoki
- */
 public class WorkoutJournalUI extends Application {
     
     private Connection conn;
@@ -229,8 +195,7 @@ public class WorkoutJournalUI extends Application {
         Scene primaryScene = new Scene(primaryPane);
         
         // Actions for buttons
-        
-        
+          
         loginButton.setOnAction((event) -> {
             String username = usernameInput.getText();
             if (tools.login(username)) {
@@ -292,6 +257,8 @@ public class WorkoutJournalUI extends Application {
         conn.close();
     }
     
+    // Creates the barChart stats of the training sessions of one week. 
+    
     public BarChart<String, Number> drawOneWeek(LocalDate monday, LocalDate sunday) throws Exception {
         
         String[] weekdays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
@@ -345,7 +312,6 @@ public class WorkoutJournalUI extends Application {
     }
     
     public static void main(String[] args) throws SQLException {
-        
         launch(WorkoutJournalUI.class);
     }   
 }

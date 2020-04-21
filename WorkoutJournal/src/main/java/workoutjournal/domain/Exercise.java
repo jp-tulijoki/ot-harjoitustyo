@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package workoutjournal.domain;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author tulijoki
- */
 public class Exercise {
-    private int user_id;
+    private int userId;
     private LocalDate date;
     private int type;
     private int duration;
@@ -20,8 +11,8 @@ public class Exercise {
     private int avgHeartRate;
     private String description;
 
-    public Exercise(int user_id, LocalDate date, int type, int duration, int distance, int avgHeartRate, String description) {
-        this.user_id = user_id;
+    public Exercise(int userId, LocalDate date, int type, int duration, int distance, int avgHeartRate, String description) {
+        this.userId = userId;
         this.date = date;
         this.type = type;
         this.duration = duration;
@@ -29,11 +20,9 @@ public class Exercise {
         this.avgHeartRate = avgHeartRate;
         this.description = description;
     }
-
     
-    
-    public int getUser_id() {
-        return user_id;
+    public int getUserId() {
+        return userId;
     }
 
     public LocalDate getDate() {
@@ -58,7 +47,5 @@ public class Exercise {
 
     public String getDescription() {
         return description;
-    }
-    
-    
+    }    
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workoutjournal.DAO;
+package workoutjournal.dao;
 
 import java.sql.SQLException;
 import workoutjournal.domain.User;

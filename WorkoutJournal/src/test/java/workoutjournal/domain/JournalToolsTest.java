@@ -1,23 +1,16 @@
 package workoutjournal.domain;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+import workoutjournal.dao.DBExerciseDAO;
+import workoutjournal.dao.UserDAO;
+import workoutjournal.dao.DBUserDAO;
+import workoutjournal.dao.ExerciseDAO;
 import java.sql.*;
 import java.time.LocalDate;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import workoutjournal.DAO.*;
 
-/**
- *
- * @author tulijoki
- */
 public class JournalToolsTest {
     
     UserDAO userDAO;
@@ -77,5 +70,6 @@ public class JournalToolsTest {
         assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
         connTest.close();
     }
+    
     
 }
