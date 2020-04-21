@@ -45,7 +45,8 @@
                 <version>0.8.3</version>
                 <configuration>
                     <excludes>
-                        <exclude>workoutjournal/UI/**/*</exclude>
+                        <exclude>workoutjournal/ui/**/*</exclude>
+                        <exclude>Main/*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
