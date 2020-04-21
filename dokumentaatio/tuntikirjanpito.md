@@ -8,4 +8,6 @@ pvm | tunnit | tehdyt asiat
 11.4. | 3 | kirjautumisen ja käyttäjätunnuksen luonnin perusversio
 17.4. | 2 | toiminto harjoituksen lisäämiseen ja testit siihen
 19.4. | 5 | käyttöliittymää ja harjoitteisiin liittyviä toimintoja eteenpäin
-yhteensä | 39 | 
+20.4. | 10 | viikon harjoitusnäkymä, harjoitusten haku tietokannasta ja näyttäminen näkymässä
+21.4. | 6 | poikkeusten käsittelyt paremmiksi, sekvenssikaavio, jar, release
+yhteensä | 55 | 
