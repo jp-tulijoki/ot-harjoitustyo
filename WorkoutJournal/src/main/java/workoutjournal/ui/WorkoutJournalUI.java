@@ -124,7 +124,7 @@ public class WorkoutJournalUI extends Application {
         
         Scene newUserScene = new Scene(newUserPane);
         
-        // Primary scene
+        // Primary scene, actions menu on top and changing views depending of the action
         
         BorderPane primaryPane = new BorderPane();
         primaryPane.setPrefSize(720, 360);
@@ -139,8 +139,14 @@ public class WorkoutJournalUI extends Application {
         Menu exercises = new Menu("Exercises");
         MenuItem addExercise = new MenuItem("Add exercise");
         MenuItem previousExercises = new MenuItem("Previous exercises");
-        MenuItem summary = new MenuItem("Summary");
-        exercises.getItems().addAll(addExercise, previousExercises, summary);
+        MenuItem weeklySummary = new MenuItem("Weekly summary");
+        exercises.getItems().addAll(addExercise, weeklySummary, previousExercises);
+        
+        actionsMenu.getMenus().addAll(settings, exercises);
+        primaryPane.setTop(actionsMenu);
+        Scene primaryScene = new Scene(primaryPane);
+        
+        // View for adding an exercise
         
         GridPane addExercisePane = new GridPane();
         
@@ -188,11 +194,17 @@ public class WorkoutJournalUI extends Application {
             primaryPane.setCenter(addExercisePane);
         });
         
-        actionsMenu.getMenus().addAll(settings, exercises);
-        
-        primaryPane.setTop(actionsMenu);
-        
-        Scene primaryScene = new Scene(primaryPane);
+        weeklySummary.setOnAction((event) -> {
+            try {
+                LocalDate monday = today.with(previousOrSame(MONDAY));
+                LocalDate sunday = today.with(nextOrSame(SUNDAY));
+                BarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
+                primaryPane.setCenter(oneWeek);
+                stage.setScene(primaryScene);
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         // Actions for buttons
           
