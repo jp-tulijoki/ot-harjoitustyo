@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package workoutjournal.UI;
+import com.sun.javafx.charts.Legend;
 import com.sun.javafx.scene.control.IntegerField;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -47,6 +48,8 @@ import javafx.css.*;
 import javafx.scene.Node;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Tooltip;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import workoutjournal.DAO.*;
 import workoutjournal.domain.*;
 
@@ -309,13 +312,12 @@ public class WorkoutJournalUI extends Application {
         }
        
         CategoryAxis dates = new CategoryAxis();
-        dates.setLabel("Date");
+        dates.setLabel("Intensity level");
         NumberAxis duration = new NumberAxis();
         duration.setLabel("Duration (minutes)");
         BarChart<String, Number> oneWeek = new BarChart<>(dates, duration);
         
         oneWeek.setTitle("Exercises " + monday.toString() + " - " + sunday.toString());
-        oneWeek.setLegendVisible(false);
         XYChart.Series exerciseChart = new XYChart.Series();
         
         for (int i = 0; i < 7; i++) {
@@ -331,6 +333,14 @@ public class WorkoutJournalUI extends Application {
             }
             c++;
         }
+        Legend legend = (Legend)oneWeek.lookup(".chart-legend");
+        legend.getItems().clear();
+        Legend.LegendItem light = new Legend.LegendItem("light", new Rectangle(10,10,Color.LIGHTGREEN));
+        Legend.LegendItem moderate = new Legend.LegendItem("moderate", new Rectangle(10,10,Color.YELLOW));
+        Legend.LegendItem hard = new Legend.LegendItem("hard", new Rectangle(10,10,Color.ORANGE));
+        Legend.LegendItem maximum = new Legend.LegendItem("maximum", new Rectangle(10,10,Color.RED));
+        Legend.LegendItem strength = new Legend.LegendItem("strength", new Rectangle(10,10,Color.SLATEGRAY));
+        legend.getItems().addAll(light, moderate, hard, maximum, strength);
         return oneWeek;
     }
     

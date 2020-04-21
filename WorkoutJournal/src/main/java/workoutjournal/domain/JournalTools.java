@@ -101,11 +101,11 @@ public class JournalTools {
     
     public String countIntensityLevel(Exercise exercise) {
         if (exercise.getType() == 2) {
-            return "black";
+            return "slategray";
         }
         int intensity = 100 * exercise.getAvgHeartRate() / loggedIn.getMaxHeartRate();
         if (intensity < 75) {
-            return "green";
+            return "lightgreen";
         } else if (intensity < 85) {
             return "yellow";
         } else if (intensity < 95) {
