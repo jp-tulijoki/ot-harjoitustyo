@@ -6,4 +6,4 @@
 
 ## Sekvenssikaaviot
 
-[Sekvenssikaavio_käyttäjän_luominen](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/sequenceDiagram_createUser.png)
+![Sekvenssikaavio_käyttäjän_luominen](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/sequenceDiagram_createUser.png)
