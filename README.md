@@ -8,6 +8,8 @@ Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensis
 
 [Tuntikirjanpito](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 
+[Release](https://github.com/jp-tulijoki/ot-harjoitustyo/releases)
+
 ### Komentorivitoiminnot
 
 Projektin koodi suoritetaan komennolla:
@@ -21,3 +23,6 @@ Testiraportti generoidaan komennolla:
 
 Tiedostoon checkstyle.xml määritellyt tarkistukset suoritetaan komennolla:
 `mvn jxr:jxr checkstyle:checkstyle`
+
+Suoritettava .jar-tiedosto generoidaan komennolla:
+`mvn package`
