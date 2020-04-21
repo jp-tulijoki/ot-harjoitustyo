@@ -197,19 +197,21 @@ public class WorkoutJournalUI extends Application {
         // Actions for buttons
           
         loginButton.setOnAction((event) -> {
-            String username = usernameInput.getText();
-            if (tools.login(username)) {
-                try {
+            try {
+                String username = usernameInput.getText();
+                if (tools.login(username)) {
                     LocalDate monday = today.with(previousOrSame(MONDAY));
                     LocalDate sunday = today.with(nextOrSame(SUNDAY));
                     BarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
                     primaryPane.setCenter(oneWeek);
+                    usernameInput.clear();
+                    passwordInput.clear();
                     stage.setScene(primaryScene);
-                } catch (Exception ex) {
-                    Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                } else {
+                    loginError.setText("Invalid credentials.");
                 }
-            } else {
-                loginError.setText("Invalid credentials.");
+            } catch (Exception ex) {
+                loginError.setText("Database connection lost. Try again later.");
             }
         });
         
@@ -222,13 +224,17 @@ public class WorkoutJournalUI extends Application {
         });
         
         createNewUserButton.setOnAction((event) -> {
-            if (tools.createUser(setUsernameInput.getText(), setPasswordInput.getText(), maxHeartRateInput.getValue())) {
-                loginInstruction.setText("New user created succesfully. You may now log in.");
-                stage.setScene(loginScene);
-            } else {
-                userCreationError.setText("Username is already in use. Please choose another username.");
-                setUsernameInput.clear();
-                setPasswordInput.clear();
+            try {
+                if (tools.createUser(setUsernameInput.getText(), setPasswordInput.getText(), maxHeartRateInput.getValue())) {
+                    loginInstruction.setText("New user created succesfully. You may now log in.");
+                    stage.setScene(loginScene);
+                } else {
+                    userCreationError.setText("Username is already in use. Please choose another username.");
+                    setUsernameInput.clear();
+                    setPasswordInput.clear();
+                }
+            } catch (Exception ex) {
+                userCreationError.setText("Database connection lost, Try again later");
             }
         });
         
@@ -240,7 +246,7 @@ public class WorkoutJournalUI extends Application {
             try {
                 tools.addExercise(tools.getLoggedUser().getId(), datePicker.getValue(), type, durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                addExerciseConfirmation.setText("Database connection lost. Try again later.");
             }
             addExerciseConfirmation.setText("Exercise added succesfully");
             durationInput.setValue(0);

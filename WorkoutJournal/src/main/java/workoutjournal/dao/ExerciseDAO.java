@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package workoutjournal.dao;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import workoutjournal.domain.Exercise;

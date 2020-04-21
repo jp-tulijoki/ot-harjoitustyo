@@ -26,44 +26,29 @@ public class JournalTools {
         }
     }
     
-    public boolean createUser(String username, String password, int maxHeartRate) {
-        try {
-            if (!(userDAO.getUserCredentials(username) == null)) {
-                return false;
-            } else {
-                userDAO.createUser(username, password, maxHeartRate);
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean createUser(String username, String password, int maxHeartRate) throws Exception {
+        if (!(userDAO.getUserCredentials(username) == null)) {
+            return false;
+        } else {
+            userDAO.createUser(username, password, maxHeartRate);
+            return true;
         }
-        return false;
     }
     
-    public boolean deleteUser(String username) {
-        try {
-            if (userDAO.getUserCredentials(username) == null) {
-                return false;
-            } else {
-                userDAO.deleteUser(username);
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean deleteUser(String username) throws Exception {
+        if (userDAO.getUserCredentials(username) == null) {
+            return false;
+        } else {
+            userDAO.deleteUser(username);
+            return true;
         }
-        return false;
     }
     
-    public boolean login(String username) {
-        try {
-            if (userDAO.getUserCredentials(username) == null) {
-                return false;
-            }
-            loggedIn = userDAO.getUserCredentials(username);
-        } catch (SQLException ex) {
-            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
+    public boolean login(String username) throws Exception {
+        if (userDAO.getUserCredentials(username) == null) {
             return false;
         }
+        loggedIn = userDAO.getUserCredentials(username);
         return true;
     }
     
@@ -76,13 +61,8 @@ public class JournalTools {
     }
 
     public boolean addExercise(int userId, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws Exception {
-        try {
-            exerciseDAO.addExercise(userId, date, type, duration, distance, avgHeartRate, description);
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(JournalTools.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+        exerciseDAO.addExercise(userId, date, type, duration, distance, avgHeartRate, description);
+        return true;
     }
     
     public ArrayList<Exercise> getOneWeeksExercises(LocalDate dateFrom, LocalDate dateTo) throws Exception {

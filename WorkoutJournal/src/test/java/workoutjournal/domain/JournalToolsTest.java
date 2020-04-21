@@ -41,7 +41,7 @@ public class JournalToolsTest {
     }
     
     @Test
-    public void createUserWorksProperly() throws SQLException {
+    public void createUserWorksProperly() throws SQLException, Exception {
         tools.createUser("mikko95", "mikonsalasana", 195);
         assertEquals(true, tools.createUser("maija90", "maijansalasana", 182));
         assertEquals(false, tools.createUser("mikko95", "mikonsalasana", 195));
@@ -50,7 +50,7 @@ public class JournalToolsTest {
     }
     
     @Test
-    public void deleteUserWorksProperly() throws SQLException {
+    public void deleteUserWorksProperly() throws SQLException, Exception {
         tools.createUser("mikko95", "mikonsalasana", 195);
         assertEquals(true, tools.deleteUser("mikko95"));
         assertEquals(false, tools.deleteUser("maija90"));
@@ -58,7 +58,7 @@ public class JournalToolsTest {
     }
     
     @Test
-    public void loginWorksProperly() throws SQLException {
+    public void loginWorksProperly() throws SQLException, Exception {
         tools.createUser("mikko95", "mikonsalasana", 195);
         assertEquals(true, tools.login("mikko95"));
         assertEquals(false, tools.login("maija90"));
@@ -70,6 +70,4 @@ public class JournalToolsTest {
         assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
         connTest.close();
     }
-    
-    
 }
