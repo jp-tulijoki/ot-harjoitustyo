@@ -10,6 +10,7 @@ import static java.time.DayOfWeek.*;
 import java.time.LocalDate;
 import static java.time.temporal.TemporalAdjusters.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.*;
 import javafx.application.Application;
 import javafx.geometry.*;
@@ -198,7 +199,7 @@ public class WorkoutJournalUI extends Application {
             try {
                 LocalDate monday = today.with(previousOrSame(MONDAY));
                 LocalDate sunday = today.with(nextOrSame(SUNDAY));
-                BarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
+                StackedBarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
                 primaryPane.setCenter(oneWeek);
                 stage.setScene(primaryScene);
             } catch (Exception ex) {
@@ -214,7 +215,7 @@ public class WorkoutJournalUI extends Application {
                 if (tools.login(username)) {
                     LocalDate monday = today.with(previousOrSame(MONDAY));
                     LocalDate sunday = today.with(nextOrSame(SUNDAY));
-                    BarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
+                    StackedBarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
                     primaryPane.setCenter(oneWeek);
                     usernameInput.clear();
                     passwordInput.clear();
@@ -271,53 +272,94 @@ public class WorkoutJournalUI extends Application {
         stage.show();
     }
     
-    public void quit() throws SQLException {
-        conn.close();
-    }
     
     // Creates the barChart stats of the training sessions of one week. 
     
-    public BarChart<String, Number> drawOneWeek(LocalDate monday, LocalDate sunday) throws Exception {
+    public StackedBarChart<String, Number> drawOneWeek(LocalDate monday, LocalDate sunday) throws Exception {
         
         String[] weekdays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
         LocalDate date = monday;
         ArrayList<Exercise> exercisesOfTheWeek = tools.getOneWeeksExercises(monday, sunday);
-        int[] durations = new int[7];
-        String[] intensityLevels = new String[7];
-        int c = 0;
-        while (date.isBefore(sunday) || date.isEqual(sunday)) {
-            for (Exercise exercise : exercisesOfTheWeek) {
-                if (exercise.getDate().equals(date)) {
-                    durations[c] = exercise.getDuration();
-                    intensityLevels[c] = tools.countIntensityLevel(exercise);
-                } 
+        int[][] durations = new int[7][3];
+        String[][] intensityLevels = new String[7][3];
+        int dateOrdinal = 0;
+        for (Exercise exercise : exercisesOfTheWeek) {
+            dateOrdinal = countDateOrdinal(exercise.getDate());
+            System.out.println(dateOrdinal);
+            if (durations[dateOrdinal][0] == 0) {
+                durations[dateOrdinal][0] = exercise.getDuration();
+                intensityLevels[dateOrdinal][0] = tools.countIntensityLevel(exercise);
+            } else if (durations[dateOrdinal][1] == 0) {
+                durations[dateOrdinal][1] = exercise.getDuration();
+                intensityLevels[dateOrdinal][1] = tools.countIntensityLevel(exercise);
+            } else {
+                durations[dateOrdinal][2] = exercise.getDuration();
+                intensityLevels[dateOrdinal][2] = tools.countIntensityLevel(exercise);
             }
-            c++;
-            date = date.plusDays(1);
         }
-       
+        for (int i = 0; i <7; i++) {
+            for (int j=0; j<3; j++){
+                System.out.println(intensityLevels[i][j]);
+            }
+                
+        }
+        System.out.println(intensityLevels[6][0]);
         CategoryAxis dates = new CategoryAxis();
         dates.setLabel("Intensity level");
         NumberAxis duration = new NumberAxis();
         duration.setLabel("Duration (minutes)");
-        BarChart<String, Number> oneWeek = new BarChart<>(dates, duration);
+        StackedBarChart<String, Number> oneWeek = new StackedBarChart<>(dates, duration);
         
         oneWeek.setTitle("Exercises " + monday.toString() + " - " + sunday.toString());
-        XYChart.Series exerciseChart = new XYChart.Series();
+        XYChart.Series series1 = new XYChart.Series();
+        XYChart.Series series2 = new XYChart.Series();
+        XYChart.Series series3 = new XYChart.Series();
         
         for (int i = 0; i < 7; i++) {
-            XYChart.Data item = new XYChart.Data<>(weekdays[i], durations[i]);
-            exerciseChart.getData().add(item);
+            XYChart.Data item = new XYChart.Data<>(weekdays[i], durations[i][0]);
+            series1.getData().add(item);
+            item = new XYChart.Data<>(weekdays[i], durations[i][1]);
+            series2.getData().add(item);
+            item = new XYChart.Data<>(weekdays[i], durations[i][2]);
+            series3.getData().add(item);
         }
-        
-        c = 0;
-        oneWeek.getData().add(exerciseChart);
+
+        int c = 0;
+        oneWeek.getData().addAll(series1, series2, series3);
         for (Node n : oneWeek.lookupAll(".default-color0.chart-bar")) {
-            if (intensityLevels[c] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c]);
+            if (intensityLevels[c][0] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][0]);
+                System.out.println(intensityLevels[c][0]);    
             }
             c++;
         }
+        
+        c = 0;
+        for (Node n : oneWeek.lookupAll(".default-color1.chart-bar")) {
+            if (intensityLevels[c][1] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][1]);
+                System.out.println(intensityLevels[c][1]);    
+            }
+            c++;
+        }
+        
+        c = 0;
+        for (Node n : oneWeek.lookupAll(".default-color2.chart-bar")) {
+            if (intensityLevels[c][2] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][2]);
+                System.out.println(intensityLevels[c][2]);    
+            }
+            c++;
+        }
+//                while (s < 3) {
+//                    
+//                    }
+//                s++;
+//                }
+//                c++;
+//                s = 0;
+//            }
+//        }
         Legend legend = (Legend)oneWeek.lookup(".chart-legend");
         legend.getItems().clear();
         Legend.LegendItem light = new Legend.LegendItem("light", new Rectangle(10,10,Color.LIGHTGREEN));
@@ -327,6 +369,24 @@ public class WorkoutJournalUI extends Application {
         Legend.LegendItem strength = new Legend.LegendItem("strength", new Rectangle(10,10,Color.SLATEGRAY));
         legend.getItems().addAll(light, moderate, hard, maximum, strength);
         return oneWeek;
+    }
+    
+    public int countDateOrdinal(LocalDate date) {
+        if (date.getDayOfWeek() == MONDAY) {
+            return 0;
+        } else if (date.getDayOfWeek() == TUESDAY) {
+            return 1;
+        } else if (date.getDayOfWeek() == WEDNESDAY) {
+            return 2;
+        } else if (date.getDayOfWeek() == THURSDAY) {
+            return 3;
+        } else if (date.getDayOfWeek() == FRIDAY) {
+            return 4;
+        } else if (date.getDayOfWeek() == SATURDAY) {
+            return 5;
+        } else {
+            return 6;
+        }   
     }
     
     public static void main(String[] args) throws SQLException {
