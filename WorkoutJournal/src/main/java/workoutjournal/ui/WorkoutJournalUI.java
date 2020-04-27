@@ -285,7 +285,6 @@ public class WorkoutJournalUI extends Application {
         int dateOrdinal = 0;
         for (Exercise exercise : exercisesOfTheWeek) {
             dateOrdinal = countDateOrdinal(exercise.getDate());
-            System.out.println(dateOrdinal);
             if (durations[dateOrdinal][0] == 0) {
                 durations[dateOrdinal][0] = exercise.getDuration();
                 intensityLevels[dateOrdinal][0] = tools.countIntensityLevel(exercise);
@@ -297,13 +296,7 @@ public class WorkoutJournalUI extends Application {
                 intensityLevels[dateOrdinal][2] = tools.countIntensityLevel(exercise);
             }
         }
-        for (int i = 0; i <7; i++) {
-            for (int j=0; j<3; j++){
-                System.out.println(intensityLevels[i][j]);
-            }
-                
-        }
-        System.out.println(intensityLevels[6][0]);
+        
         CategoryAxis dates = new CategoryAxis();
         dates.setLabel("Intensity level");
         NumberAxis duration = new NumberAxis();
@@ -328,8 +321,7 @@ public class WorkoutJournalUI extends Application {
         oneWeek.getData().addAll(series1, series2, series3);
         for (Node n : oneWeek.lookupAll(".default-color0.chart-bar")) {
             if (intensityLevels[c][0] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][0]);
-                System.out.println(intensityLevels[c][0]);    
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][0]);    
             }
             c++;
         }
@@ -337,8 +329,7 @@ public class WorkoutJournalUI extends Application {
         c = 0;
         for (Node n : oneWeek.lookupAll(".default-color1.chart-bar")) {
             if (intensityLevels[c][1] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][1]);
-                System.out.println(intensityLevels[c][1]);    
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][1]);    
             }
             c++;
         }
@@ -346,20 +337,11 @@ public class WorkoutJournalUI extends Application {
         c = 0;
         for (Node n : oneWeek.lookupAll(".default-color2.chart-bar")) {
             if (intensityLevels[c][2] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][2]);
-                System.out.println(intensityLevels[c][2]);    
+                n.setStyle("-fx-bar-fill: " + intensityLevels[c][2]);    
             }
             c++;
         }
-//                while (s < 3) {
-//                    
-//                    }
-//                s++;
-//                }
-//                c++;
-//                s = 0;
-//            }
-//        }
+
         Legend legend = (Legend)oneWeek.lookup(".chart-legend");
         legend.getItems().clear();
         Legend.LegendItem light = new Legend.LegendItem("light", new Rectangle(10,10,Color.LIGHTGREEN));
