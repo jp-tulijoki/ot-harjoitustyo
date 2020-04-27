@@ -10,4 +10,5 @@ pvm | tunnit | tehdyt asiat
 19.4. | 5 | käyttöliittymää ja harjoitteisiin liittyviä toimintoja eteenpäin
 20.4. | 10 | viikon harjoitusnäkymä, harjoitusten haku tietokannasta ja näyttäminen näkymässä
 21.4. | 6 | poikkeusten käsittelyt paremmiksi, sekvenssikaavio, jar, release
-yhteensä | 55 | 
+27.4 | 3 | viikkograafi toimimaan usealla päiväharjoituksella
+yhteensä | 58 | 
