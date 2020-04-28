@@ -117,4 +117,23 @@ public class JournalToolsTest {
         tools.deleteUser("mikko95");
         connTest.close();
     }
+    
+    @Test
+    public void countIntensityLevelWorksProperly() throws Exception {
+        tools.createUser("mikko95", "mikonsalasana", 195);
+        tools.login("mikko95");
+        Exercise strength = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 2, 60, 0, 0, "strength");
+        assertEquals(IntensityLevel.STRENGTH, tools.countIntensityLevel(strength));
+        Exercise light = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 140, "light");
+        assertEquals(IntensityLevel.LIGHT, tools.countIntensityLevel(light));
+        Exercise moderate = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 160, "moderate");
+        assertEquals(IntensityLevel.MODERATE, tools.countIntensityLevel(moderate));
+        Exercise hard = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 180, "hard");
+        assertEquals(IntensityLevel.HARD, tools.countIntensityLevel(hard));
+        Exercise maximum = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 195, "maximum");
+        assertEquals(IntensityLevel.MAXIMUM, tools.countIntensityLevel(maximum));
+        tools.logout();
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
 }

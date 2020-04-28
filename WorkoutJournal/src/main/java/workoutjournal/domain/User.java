@@ -17,25 +17,9 @@ public class User {
         return id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public int getMaxHeartRate() {
         return maxHeartRate;
     }
     
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof User)) {
-            return false;
-        }
-        User other = (User) object;
-        return this.username.equals(other.username);
-    }     
 }
 

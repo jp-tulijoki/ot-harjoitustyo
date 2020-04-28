@@ -78,23 +78,23 @@ public class JournalTools {
         return true;
     }
     
-    public ArrayList<Exercise> getOneWeeksExercises(LocalDate dateFrom, LocalDate dateTo) throws Exception {
+    public ArrayList<Exercise> getExerciseList(LocalDate dateFrom, LocalDate dateTo) throws Exception {
         return exerciseDAO.getExercises(loggedIn.getId(), dateFrom, dateTo);
     }
     
-    public String countIntensityLevel(Exercise exercise) {
+    public IntensityLevel countIntensityLevel(Exercise exercise) {
         if (exercise.getType() == 2) {
-            return "slategray";
+            return IntensityLevel.STRENGTH;
         }
         int intensity = 100 * exercise.getAvgHeartRate() / loggedIn.getMaxHeartRate();
         if (intensity < 75) {
-            return "lightgreen";
+            return IntensityLevel.LIGHT;
         } else if (intensity < 85) {
-            return "yellow";
+            return IntensityLevel.MODERATE;
         } else if (intensity < 95) {
-            return "orange";
+            return IntensityLevel.HARD;
         } else {
-            return "red";
+            return IntensityLevel.MAXIMUM;
         }
     }
 }

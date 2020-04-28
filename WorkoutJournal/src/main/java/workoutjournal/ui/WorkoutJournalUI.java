@@ -278,21 +278,21 @@ public class WorkoutJournalUI extends Application {
         
         String[] weekdays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
         LocalDate date = monday;
-        ArrayList<Exercise> exercisesOfTheWeek = tools.getOneWeeksExercises(monday, sunday);
+        ArrayList<Exercise> exercisesOfTheWeek = tools.getExerciseList(monday, sunday);
         int[][] durations = new int[7][3];
-        String[][] intensityLevels = new String[7][3];
+        String[][] intensityLevelColor = new String[7][3];
         int dateOrdinal = 0;
         for (Exercise exercise : exercisesOfTheWeek) {
             dateOrdinal = countDateOrdinal(exercise.getDate());
             if (durations[dateOrdinal][0] == 0) {
                 durations[dateOrdinal][0] = exercise.getDuration();
-                intensityLevels[dateOrdinal][0] = tools.countIntensityLevel(exercise);
+                intensityLevelColor[dateOrdinal][0] = tools.countIntensityLevel(exercise).getColor();
             } else if (durations[dateOrdinal][1] == 0) {
                 durations[dateOrdinal][1] = exercise.getDuration();
-                intensityLevels[dateOrdinal][1] = tools.countIntensityLevel(exercise);
+                intensityLevelColor[dateOrdinal][1] = tools.countIntensityLevel(exercise).getColor();
             } else {
                 durations[dateOrdinal][2] = exercise.getDuration();
-                intensityLevels[dateOrdinal][2] = tools.countIntensityLevel(exercise);
+                intensityLevelColor[dateOrdinal][2] = tools.countIntensityLevel(exercise).getColor();
             }
         }
         
@@ -319,24 +319,24 @@ public class WorkoutJournalUI extends Application {
         int c = 0;
         oneWeek.getData().addAll(series1, series2, series3);
         for (Node n : oneWeek.lookupAll(".default-color0.chart-bar")) {
-            if (intensityLevels[c][0] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][0]);    
+            if (intensityLevelColor[c][0] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevelColor[c][0]);    
             }
             c++;
         }
         
         c = 0;
         for (Node n : oneWeek.lookupAll(".default-color1.chart-bar")) {
-            if (intensityLevels[c][1] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][1]);    
+            if (intensityLevelColor[c][1] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevelColor[c][1]);    
             }
             c++;
         }
         
         c = 0;
         for (Node n : oneWeek.lookupAll(".default-color2.chart-bar")) {
-            if (intensityLevels[c][2] != null) {
-                n.setStyle("-fx-bar-fill: " + intensityLevels[c][2]);    
+            if (intensityLevelColor[c][2] != null) {
+                n.setStyle("-fx-bar-fill: " + intensityLevelColor[c][2]);    
             }
             c++;
         }
