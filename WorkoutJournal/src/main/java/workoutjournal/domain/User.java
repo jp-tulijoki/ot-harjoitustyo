@@ -1,5 +1,9 @@
 package workoutjournal.domain;
 
+/**
+ * The User class defines the User object and its attributes and is used
+ * in processing details of the current user.
+ */
 public class User {
     private int id;
     private String username;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package workoutjournal.dao;
 import java.sql.*;
 import java.time.LocalDate;
@@ -10,18 +5,34 @@ import java.util.ArrayList;
 import workoutjournal.domain.Exercise;
 
 /**
- *
- * @author tulijoki
+ * Database implementation of the ExerciseDAO.
  */
-
 public class DBExerciseDAO implements ExerciseDAO {
     
     Connection conn;
-
+    
+    /**
+     * The constructor defines the connection used.
+     * @param conn the connection is defined when the program is started.
+     */
     public DBExerciseDAO(Connection conn) {
         this.conn = conn;
     }
 
+    /**
+     * Method stores an exercise in the database.
+     * 
+     * @param userId userId submitted via JournalTools
+     * @param date exercise date submitted via JournalTools
+     * @param type exercise type submitted via JournalTools
+     * @param duration exercise duration submitted via JournalTools
+     * @param distance distance covered in endurance training submitted via 
+     * JournalTools
+     * @param avgHeartRate avgHeartRate of endurance training submitted via 
+     * JournalTools
+     * @param description exercise description submitted via JournalTools
+     * @throws SQLException 
+     */
     @Override
     public void addExercise(int userId, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws SQLException {
         Date sqlDate = Date.valueOf(date);
@@ -36,6 +47,16 @@ public class DBExerciseDAO implements ExerciseDAO {
         p.executeUpdate();
     }
 
+    /**
+     * Method returns the exercises of a certain user of a certain time period
+     * as a list.
+     * 
+     * @param userId userId submitted via JournalTools
+     * @param fromDate the first date of the time period
+     * @param toDate the last date of the time period
+     * @return returns an ArrayList containing Exercise objects.
+     * @throws SQLException 
+     */
     @Override
     public ArrayList<Exercise> getExercises(int userId, LocalDate fromDate, LocalDate toDate) throws SQLException {
         ArrayList<Exercise> exercises = new ArrayList();

@@ -2,6 +2,10 @@ package workoutjournal.domain;
 
 import java.time.LocalDate;
 
+/**
+ * The Exercise class defines the Exercise object and its attributes and is used
+ * in processing exercises.
+ */
 public class Exercise {
     private int userId;
     private LocalDate date;

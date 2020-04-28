@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import workoutjournal.domain.Exercise;
 
 /**
- *
- * @author tulijoki
+ * Interface for reaching the ExerciseDAO.
  */
 public interface ExerciseDAO {
     
