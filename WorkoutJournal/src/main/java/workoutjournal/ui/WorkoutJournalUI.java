@@ -272,7 +272,6 @@ public class WorkoutJournalUI extends Application {
         stage.show();
     }
     
-    
     // Creates the barChart stats of the training sessions of one week. 
     
     public StackedBarChart<String, Number> drawOneWeek(LocalDate monday, LocalDate sunday) throws Exception {

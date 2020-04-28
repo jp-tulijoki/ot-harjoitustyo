@@ -1,5 +1,6 @@
 package workoutjournal.domain;
 
+import java.security.NoSuchAlgorithmException;
 import workoutjournal.dao.DBExerciseDAO;
 import workoutjournal.dao.UserDAO;
 import workoutjournal.dao.DBUserDAO;
@@ -38,6 +39,20 @@ public class JournalToolsTest {
     public void countMaxHeartRateWorksProperly() {
         assertEquals(190, tools.countMaxHeartRate(30, "male"));
         assertEquals(174, tools.countMaxHeartRate(40, "female"));
+    }
+    
+    @Test
+    public void samePasswordInputCreatesSamePasswordHash() throws NoSuchAlgorithmException {
+        String password = "password";
+        String password2 = "password";
+        assertEquals(true, tools.hashPassword(password).equals(tools.hashPassword(password2)));
+    }
+    
+    @Test
+    public void differentPasswordInputCreatesDifferentPasswordHash() throws NoSuchAlgorithmException {
+        String password = "password";
+        String password2 = "PASSWORD";
+        assertEquals(false, tools.hashPassword(password).equals(tools.hashPassword(password2)));
     }
     
     @Test
