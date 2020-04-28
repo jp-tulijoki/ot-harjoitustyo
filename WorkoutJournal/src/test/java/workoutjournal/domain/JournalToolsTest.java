@@ -7,6 +7,7 @@ import workoutjournal.dao.DBUserDAO;
 import workoutjournal.dao.ExerciseDAO;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,6 +62,7 @@ public class JournalToolsTest {
         assertEquals(true, tools.createUser("maija90", "maijansalasana", 182));
         assertEquals(false, tools.createUser("mikko95", "mikonsalasana", 195));
         tools.deleteUser("maija90");
+        tools.deleteUser("mikko95");
         connTest.close();
     }
     
@@ -77,12 +79,42 @@ public class JournalToolsTest {
         tools.createUser("mikko95", "mikonsalasana", 195);
         assertEquals(true, tools.login("mikko95"));
         assertEquals(false, tools.login("maija90"));
+        tools.deleteUser("mikko95");
         connTest.close();
     }
     
     @Test
     public void addExerciseWorksProperly() throws SQLException, Exception {
         assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
+        connTest.close();
+    }
+    
+    @Test
+    public void exerciseListContainsTheExercisesOfTheSelectedPeriod() throws Exception {
+        tools.createUser("mikko95", "mikonsalasana", 195);
+        tools.login("mikko95");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
+        ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
+        for (Exercise exercise : exercises) {
+            assertEquals(true, exercise.getDate().isEqual(LocalDate.now()));
+        }
+        tools.logout();
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
+    public void exerciseListDoesNotContainExercisesOutsideTheSelectedPeriod() throws Exception {
+        tools.createUser("mikko95", "mikonsalasana", 195);
+        tools.login("mikko95");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
+        ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
+        for (Exercise exercise : exercises) {
+            assertEquals(false, exercise.getDate().isBefore(LocalDate.now()));
+            assertEquals(false, exercise.getDate().isAfter(LocalDate.now()));
+        }
+        tools.logout();
+        tools.deleteUser("mikko95");
         connTest.close();
     }
 }
