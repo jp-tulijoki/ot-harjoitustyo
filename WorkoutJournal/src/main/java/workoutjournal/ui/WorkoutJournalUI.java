@@ -5,6 +5,7 @@ import workoutjournal.dao.UserDAO;
 import workoutjournal.dao.DBExerciseDAO;
 import com.sun.javafx.charts.Legend;
 import com.sun.javafx.scene.control.IntegerField;
+import static java.lang.Double.isNaN;
 import java.sql.*;
 import static java.time.DayOfWeek.*;
 import java.time.LocalDate;
@@ -141,7 +142,8 @@ public class WorkoutJournalUI extends Application {
         MenuItem addExercise = new MenuItem("Add exercise");
         MenuItem previousExercises = new MenuItem("Previous exercises");
         MenuItem weeklySummary = new MenuItem("Weekly summary");
-        exercises.getItems().addAll(addExercise, weeklySummary, previousExercises);
+        MenuItem monthlySummary = new MenuItem("Monthly summary");
+        exercises.getItems().addAll(addExercise, previousExercises, weeklySummary, monthlySummary);
         
         actionsMenu.getMenus().addAll(settings, exercises);
         primaryPane.setTop(actionsMenu);
@@ -184,6 +186,16 @@ public class WorkoutJournalUI extends Application {
         addExercisePane.add(addExerciseButton, 1, 7);
         addExercisePane.add(addExerciseConfirmation, 0, 8);
         
+        // Montly summary
+        
+        VBox monthlyStats = new VBox();
+        monthlyStats.setSpacing(10);
+        
+        Label monthlyDistanceLabel = new Label("");
+        Label monthlyDevelopmentLabel = new Label("");
+        
+        monthlyStats.getChildren().addAll(monthlyDistanceLabel, monthlyDevelopmentLabel);
+        
         // Menu actions
         
         logout.setOnAction((event) -> {
@@ -205,6 +217,25 @@ public class WorkoutJournalUI extends Application {
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+        });
+        
+        monthlySummary.setOnAction((event) -> {
+            try {
+                int currentMonthDistance = tools.countMonthlyDistance(today);
+                int previousMonthDistance = tools.countMonthlyDistance(today.minusMonths(1));
+                double development = tools.countMonthlyDistanceDevelopment(currentMonthDistance, previousMonthDistance);
+                monthlyDistanceLabel.setText("Your total distance covered in " + today.minusMonths(1).getMonth() + " " + today.minusMonths(1).getYear() + " was " + currentMonthDistance + " kilometers.");
+                if (isNaN(development)) {
+                    monthlyDevelopmentLabel.setText("As there are no running exercises in the month before, distance development can not be counted");
+                } else if (development < 0) {
+                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered decreased by " + Math.round(Math.abs(development) * 100) + " %.");
+                } else {
+                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered increased by " + Math.round(development * 100) + " %. Good job!");
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            primaryPane.setCenter(monthlyStats);
         });
         
         // Actions for buttons
@@ -270,6 +301,10 @@ public class WorkoutJournalUI extends Application {
         
         stage.setScene(loginScene);
         stage.show();
+    }
+    
+    public void stop() throws SQLException {
+        conn.close();
     }
     
     // Creates the barChart stats of the training sessions of one week. 
