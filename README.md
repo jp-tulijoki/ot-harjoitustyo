@@ -12,6 +12,8 @@ Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensis
 
 ### Komentorivitoiminnot
 
+Komentorivitoiminnot suoritetaan kansiossa `WorkoutJournal`.
+
 Projektin koodi suoritetaan komennolla:
 `mvn compile exec:java -Dexec.mainClass=Main.Main`
 
@@ -26,3 +28,5 @@ Tiedostoon checkstyle.xml määritellyt tarkistukset suoritetaan komennolla:
 
 Suoritettava .jar-tiedosto generoidaan komennolla:
 `mvn package`
+
+Javadoc generoidaan komennolla `mvn javadoc:javadoc`
