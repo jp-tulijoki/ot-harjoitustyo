@@ -136,4 +136,25 @@ public class JournalToolsTest {
         tools.deleteUser("mikko95");
         connTest.close();
     }
+    
+    @Test
+    public void countMonthlyDistanceWorksProperly() throws Exception {
+        tools.createUser("mikko95", "mikonsalasana", 195);
+        tools.login("mikko95");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 12, 145, "jogging that should not be included in this count");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 60, 12, 150, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 40, 10, 180, "hard running");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 2, 60, 0, 0, "strength");
+        assertEquals(22, tools.countMonthlyDistance(LocalDate.now()));
+        tools.logout();
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
+    public void monthlyDistanceDevelopmentIsCountedProperly() {
+        assertEquals(0.5, tools.countMonthlyDistanceDevelopment(300, 200), 0.01);
+        assertEquals(-0.25, tools.countMonthlyDistanceDevelopment(150, 200), 0.01);
+        assertEquals(Double.NaN, tools.countMonthlyDistanceDevelopment(300, 0), 0.01);
+    }
 }

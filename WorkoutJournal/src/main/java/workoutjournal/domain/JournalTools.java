@@ -2,13 +2,10 @@ package workoutjournal.domain;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.*;
 import workoutjournal.dao.UserDAO;
 import workoutjournal.dao.ExerciseDAO;
-import workoutjournal.domain.User;
 
 public class JournalTools {
     private UserDAO userDAO;
@@ -22,7 +19,7 @@ public class JournalTools {
         
     public int countMaxHeartRate(int age, String sex) {
         if (sex.equals("female")) {
-            return 206 - Integer.valueOf((int) (0.8 * age));
+            return 206 - (int) (0.8 * age);
         } else {
             return 220 - age;
         }
@@ -96,5 +93,26 @@ public class JournalTools {
         } else {
             return IntensityLevel.MAXIMUM;
         }
+    }
+    
+    public int countMonthlyDistance(LocalDate date) throws Exception {
+        LocalDate firstDayOfMonth = date.minusMonths(1).withDayOfMonth(1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+        ArrayList<Exercise> exercises = getExerciseList(firstDayOfMonth, lastDayOfMonth);
+        int totalDistance = 0;
+        for (Exercise exercise : exercises) {
+            if (exercise.getType() == 2) {
+                continue;
+            }
+            totalDistance += exercise.getDistance();
+        }
+        return totalDistance;
+    }
+    
+    public double countMonthlyDistanceDevelopment(int currentMonthDistance, int previousMonthDistance) {
+        if (previousMonthDistance == 0) {
+            return Double.NaN;
+        }
+        return (double) currentMonthDistance / previousMonthDistance - 1; 
     }
 }
