@@ -6,9 +6,15 @@ Sovelluksen avulla käyttäjä voi pitää kirjaa liikuntasuorituksistaan. Ensis
 
 [Arkkitehtuurikuvaus](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md)
+
 [Tuntikirjanpito](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 
-[Release](https://github.com/jp-tulijoki/ot-harjoitustyo/releases)
+## Releaset
+
+[Release 1](https://github.com/jp-tulijoki/ot-harjoitustyo/releases/tag/v0.5)
+
+[Release 2](https://github.com/jp-tulijoki/ot-harjoitustyo/releases/tag/v0.6)
 
 ### Komentorivitoiminnot
 
