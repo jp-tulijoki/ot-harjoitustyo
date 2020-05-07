@@ -79,6 +79,7 @@ public class JournalTools {
         if (!(userDAO.getUserCredentials(username) == null)) {
             return false;
         } else {
+            password = hashPassword(password);
             userDAO.createUser(username, password, maxHeartRate);
             return true;
         }
@@ -103,16 +104,22 @@ public class JournalTools {
     }
     
     /**
-     * Logs in the user with the given username. (Password check will be
-     * implemented later.)
+     * Method checks that the user exists and the password is correct. If these
+     * requirements are met, the method logs in the user.
      * 
      * @param username username given by the user
-     * @return returns false if the user can not be found in the UserDAO and
+     * @return Returns false if the user can not be found in the UserDAO or
+     * given password does not match the password in the UserDAO. Returns 
      * true if the login was successful.
      * @throws Exception 
      */
-    public boolean login(String username) throws Exception {
-        if (userDAO.getUserCredentials(username) == null) {
+    public boolean login(String username, String password) throws Exception {
+        User user = userDAO.getUserCredentials(username);
+        if (user == null) {
+            return false;
+        }
+        String hashedPassword = hashPassword(password);
+        if (!(user.getPassword().equals(hashedPassword))) {
             return false;
         }
         loggedIn = userDAO.getUserCredentials(username);

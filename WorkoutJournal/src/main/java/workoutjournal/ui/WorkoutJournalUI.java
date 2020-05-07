@@ -38,7 +38,7 @@ public class WorkoutJournalUI extends Application {
         this.conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
         Statement s = conn.createStatement();
         try {
-            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password TEXT, maxHeartRate INTEGER)");
+            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password VARCHAR NOT NULL, maxHeartRate INTEGER)");
             s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, distance INTEGER, avgHeartRate INTEGER, description TEXT)");
         } catch (SQLException ex) {
         }
@@ -104,6 +104,7 @@ public class WorkoutJournalUI extends Application {
         Label sex = new Label("Sex");
         ChoiceBox<String> sexes = new ChoiceBox();
         sexes.getItems().addAll("female", "male");
+        sexes.getSelectionModel().selectFirst();
         Button countMaxHeartRateButton = new Button("Count max heart rate");
         Button createNewUserButton = new Button("Create new user");
         Label userCreationError = new Label("");
@@ -242,8 +243,7 @@ public class WorkoutJournalUI extends Application {
           
         loginButton.setOnAction((event) -> {
             try {
-                String username = usernameInput.getText();
-                if (tools.login(username)) {
+                if (tools.login(usernameInput.getText(), passwordInput.getText())) {
                     LocalDate monday = today.with(previousOrSame(MONDAY));
                     LocalDate sunday = today.with(nextOrSame(SUNDAY));
                     StackedBarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
@@ -252,10 +252,11 @@ public class WorkoutJournalUI extends Application {
                     passwordInput.clear();
                     stage.setScene(primaryScene);
                 } else {
-                    loginError.setText("Invalid credentials.");
+                    loginError.setText("User not found or invalid password.");
                 }
             } catch (Exception ex) {
                 loginError.setText("Database connection lost. Try again later.");
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
@@ -268,8 +269,12 @@ public class WorkoutJournalUI extends Application {
         });
         
         createNewUserButton.setOnAction((event) -> {
+            String username = setUsernameInput.getText();
+            String password = setPasswordInput.getText();
             try {
-                if (tools.createUser(setUsernameInput.getText(), setPasswordInput.getText(), maxHeartRateInput.getValue())) {
+                if (username.length() < 3 || password.length() < 3) {
+                    userCreationError.setText("Username and password have to be at least 3 characters long.");
+                } else if (tools.createUser(setUsernameInput.getText(), password, maxHeartRateInput.getValue())) {
                     loginInstruction.setText("New user created succesfully. You may now log in.");
                     stage.setScene(loginScene);
                 } else {
@@ -278,7 +283,7 @@ public class WorkoutJournalUI extends Application {
                     setPasswordInput.clear();
                 }
             } catch (Exception ex) {
-                userCreationError.setText("Database connection lost, Try again later");
+                userCreationError.setText("Database connection is lost or something unexpected happened. Try again later");
             }
         });
         

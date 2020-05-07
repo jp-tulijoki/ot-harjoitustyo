@@ -58,9 +58,9 @@ public class JournalToolsTest {
     
     @Test
     public void createUserWorksProperly() throws SQLException, Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        assertEquals(true, tools.createUser("maija90", "maijansalasana", 182));
-        assertEquals(false, tools.createUser("mikko95", "mikonsalasana", 195));
+        tools.createUser("mikko95", "password", 195);
+        assertEquals(true, tools.createUser("maija90", "password", 182));
+        assertEquals(false, tools.createUser("mikko95", "password", 195));
         tools.deleteUser("maija90");
         tools.deleteUser("mikko95");
         connTest.close();
@@ -68,7 +68,7 @@ public class JournalToolsTest {
     
     @Test
     public void deleteUserWorksProperly() throws SQLException, Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
+        tools.createUser("mikko95", "password", 195);
         assertEquals(true, tools.deleteUser("mikko95"));
         assertEquals(false, tools.deleteUser("maija90"));
         connTest.close();
@@ -76,9 +76,10 @@ public class JournalToolsTest {
     
     @Test
     public void loginWorksProperly() throws SQLException, Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        assertEquals(true, tools.login("mikko95"));
-        assertEquals(false, tools.login("maija90"));
+        tools.createUser("mikko95", "password", 195);
+        assertEquals(true, tools.login("mikko95", "password"));
+        assertEquals(false, tools.login("maija90", "password"));
+        assertEquals(false, tools.login("mikko95", "incorrectpassword"));
         tools.deleteUser("mikko95");
         connTest.close();
     }
@@ -91,8 +92,8 @@ public class JournalToolsTest {
     
     @Test
     public void exerciseListContainsTheExercisesOfTheSelectedPeriod() throws Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        tools.login("mikko95");
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
         tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
         ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
         for (Exercise exercise : exercises) {
@@ -105,8 +106,8 @@ public class JournalToolsTest {
     
     @Test
     public void exerciseListDoesNotContainExercisesOutsideTheSelectedPeriod() throws Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        tools.login("mikko95");
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
         tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
         ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
         for (Exercise exercise : exercises) {
@@ -120,8 +121,8 @@ public class JournalToolsTest {
     
     @Test
     public void countIntensityLevelWorksProperly() throws Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        tools.login("mikko95");
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
         Exercise strength = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 2, 60, 0, 0, "strength");
         assertEquals(IntensityLevel.STRENGTH, tools.countIntensityLevel(strength));
         Exercise light = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 140, "light");
@@ -139,8 +140,8 @@ public class JournalToolsTest {
     
     @Test
     public void countMonthlyDistanceWorksProperly() throws Exception {
-        tools.createUser("mikko95", "mikonsalasana", 195);
-        tools.login("mikko95");
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
         tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 12, 145, "jogging that should not be included in this count");
         tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 60, 12, 150, "relaxed jogging in good weather");
         tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 40, 10, 180, "hard running");

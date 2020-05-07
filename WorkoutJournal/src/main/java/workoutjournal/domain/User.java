@@ -10,11 +10,19 @@ public class User {
     private String password;
     private int maxHeartRate;
 
-    public User(int id, String username, String name, int maxHeartRate) {
+    public User(int id, String username, String password, int maxHeartRate) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.maxHeartRate = maxHeartRate;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public int getId() {
