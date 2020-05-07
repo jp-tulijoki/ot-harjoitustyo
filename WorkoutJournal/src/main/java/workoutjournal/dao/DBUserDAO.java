@@ -65,4 +65,20 @@ public class DBUserDAO implements UserDAO {
         User user = new User(r.getInt("id"), r.getString("username"), r.getString("password"), r.getInt("maxHeartRate"));
         return user;
     }
+
+    @Override
+    public void updateMaxHeartRate(int userId, int maxHeartRate) throws Exception {
+        PreparedStatement p = conn.prepareStatement("UPDATE users SET maxHeartRate = ? WHERE id = ?");
+        p.setInt(1, maxHeartRate);
+        p.setInt(2, userId);
+        p.executeUpdate();
+    }
+
+    @Override
+    public void updatePassword(int userId, String password) throws Exception {
+        PreparedStatement p = conn.prepareStatement("UPDATE users SET password = ? WHERE id = ?");
+        p.setString(1, password);
+        p.setInt(2, userId);
+        p.executeUpdate();
+    }
 }

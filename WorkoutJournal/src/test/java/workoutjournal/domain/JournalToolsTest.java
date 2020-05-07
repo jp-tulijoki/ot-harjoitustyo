@@ -85,6 +85,28 @@ public class JournalToolsTest {
     }
     
     @Test
+    public void updateMaxHeartRateWorksProperly() throws Exception {
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
+        tools.updateMaxHeartRate(190);  
+        assertEquals(190, tools.getLoggedUser().getMaxHeartRate());
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
+    public void changePasswordWorksProperly() throws Exception {
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
+        String newPassword = "newpassword";
+        assertEquals(false, tools.changePassword("incorrectOldPassword", newPassword));
+        assertEquals(true, tools.changePassword("password", newPassword));
+        assertEquals(tools.hashPassword(newPassword), tools.getLoggedUser().getPassword());
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
     public void addExerciseWorksProperly() throws SQLException, Exception {
         assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
         connTest.close();

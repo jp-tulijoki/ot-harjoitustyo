@@ -122,7 +122,7 @@ public class JournalTools {
         if (!(user.getPassword().equals(hashedPassword))) {
             return false;
         }
-        loggedIn = userDAO.getUserCredentials(username);
+        loggedIn = user;
         return true;
     }
     
@@ -139,6 +139,22 @@ public class JournalTools {
      */
     public User getLoggedUser() {
         return loggedIn;
+    }
+    
+    public void updateMaxHeartRate(int maxHeartRate) throws Exception {
+        userDAO.updateMaxHeartRate(loggedIn.getId(), maxHeartRate);
+        loggedIn = userDAO.getUserCredentials(loggedIn.getUsername());
+    }
+    
+    public boolean changePassword(String oldPassword, String newPassword) throws NoSuchAlgorithmException, Exception {
+        oldPassword = hashPassword(oldPassword);
+        if (!(getLoggedUser().getPassword().equals(oldPassword))) {
+            return false;
+        }
+        newPassword = hashPassword(newPassword);
+        userDAO.updatePassword(getLoggedUser().getId(), newPassword);
+        loggedIn = userDAO.getUserCredentials(loggedIn.getUsername());
+        return true;
     }
     
     /**

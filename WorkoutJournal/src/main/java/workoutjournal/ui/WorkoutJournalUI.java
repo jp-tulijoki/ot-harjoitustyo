@@ -135,9 +135,10 @@ public class WorkoutJournalUI extends Application {
         MenuBar actionsMenu = new MenuBar();
         
         Menu settings = new Menu("Settings");
-        MenuItem profile = new MenuItem("Profile");
+        MenuItem updateMaxHeartRate = new MenuItem("Update max heart rate");
+        MenuItem changePassword = new MenuItem("Change password");
         MenuItem logout = new MenuItem("Log out");
-        settings.getItems().addAll(profile, logout);
+        settings.getItems().addAll(updateMaxHeartRate, changePassword, logout);
         
         Menu exercises = new Menu("Exercises");
         MenuItem addExercise = new MenuItem("Add exercise");
