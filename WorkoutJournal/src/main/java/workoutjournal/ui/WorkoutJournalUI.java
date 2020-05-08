@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import workoutjournal.domain.*;
@@ -141,13 +142,6 @@ public class WorkoutJournalUI extends Application {
         primaryPane.setTop(actionsMenu);
         Scene primaryScene = new Scene(primaryPane);
         
-        // Toggle week buttons
-        
-        HBox toggleWeekBox = new HBox();
-        Button previousWeekButton = new Button("Previous week");
-        Button nextWeekButton = new Button("Next week");
-        toggleWeekBox.getChildren().addAll(previousWeekButton, nextWeekButton);
-        
         // View for updating max heart rate
         
         GridPane updateMaxHeartRatePane = new GridPane();
@@ -203,24 +197,19 @@ public class WorkoutJournalUI extends Application {
         addExercisePane.add(addExerciseButton, 1, 7);
         addExercisePane.add(addExerciseConfirmation, 0, 8);
         
-        // Monthly summary
+        // Toggle week buttons for weekly summary
         
-        VBox monthlyStatsBox = new VBox();
-        monthlyStatsBox.setSpacing(10);
+        HBox toggleWeekBox = new HBox();
+        Button previousWeekButton = new Button("Previous week");
+        Button nextWeekButton = new Button("Next week");
+        toggleWeekBox.getChildren().addAll(previousWeekButton, nextWeekButton);
         
-        Label monthlyDistanceLabel = new Label("");
-        Label monthlyDevelopmentLabel = new Label("");
+        // Toggle month buttons for monthly summary
         
-        monthlyStatsBox.getChildren().addAll(monthlyDistanceLabel, monthlyDevelopmentLabel);
-        
-        HBox toggleMonthBox = new HBox(); 
-        Button previousMonthButton = new Button("Previous week");
-        Button nextMonthButton = new Button("Next week");
+        HBox toggleMonthBox = new HBox();
+        Button previousMonthButton = new Button("Previous month");
+        Button nextMonthButton = new Button("Next month");
         toggleMonthBox.getChildren().addAll(previousMonthButton, nextMonthButton);
-        
-        BorderPane statsAndToggleMonthPane = new BorderPane();
-        statsAndToggleMonthPane.setTop(monthlyStatsBox);
-        statsAndToggleMonthPane.setBottom(toggleMonthBox);
         
         // Menu actions
                 
@@ -259,6 +248,32 @@ public class WorkoutJournalUI extends Application {
             primaryPane.setCenter(addExercisePane);
         });
         
+        previousExercises.setOnAction((event) -> {
+            try {
+                TableView<Exercise> exerciseTable = new TableView();
+                TableColumn<Exercise, LocalDate> dateColumn = new TableColumn("Date");
+                dateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, LocalDate>("date"));
+                TableColumn<Exercise, Integer> typeColumn = new TableColumn("Type");
+                typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+                TableColumn<Exercise, Integer> durationColumn = new TableColumn("Duration");
+                durationColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("duration"));
+                TableColumn<Exercise, Integer> distanceColumn = new TableColumn("Distance");
+                distanceColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("distance"));
+                TableColumn <Exercise, Integer> avgHeartRateColumn = new TableColumn("Average heart rate");
+                avgHeartRateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("avgHeartRate"));
+                TableColumn<Exercise, String> descriptionColumn = new TableColumn("Description");
+                descriptionColumn.setCellValueFactory(new PropertyValueFactory<Exercise, String>("type"));
+                typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+                exerciseTable.getColumns().addAll(dateColumn, typeColumn, durationColumn, distanceColumn, avgHeartRateColumn, descriptionColumn);
+                ArrayList<Exercise> exerciseList = jTools.getExerciseList(date.minusMonths(1), date.plusMonths(1));
+                ObservableList<Exercise> exerciseData = FXCollections.observableArrayList(exerciseList);
+                exerciseTable.setItems(exerciseData);
+                primaryPane.setCenter(exerciseTable);
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        });
         
         weeklySummary.setOnAction((event) -> {
             try {
@@ -267,8 +282,6 @@ public class WorkoutJournalUI extends Application {
                 StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
                 primaryPane.setCenter(oneWeek);
                 primaryPane.setBottom(toggleWeekBox);
-                primaryPane.setLeft(null);
-                primaryPane.setRight(null);
                 stage.setScene(primaryScene);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -279,6 +292,7 @@ public class WorkoutJournalUI extends Application {
             try {
                 BorderPane monthlySummaryPane = uiTools.drawMonthlyStats(today);
                 primaryPane.setCenter(monthlySummaryPane);
+                primaryPane.setBottom(toggleMonthBox);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -294,6 +308,7 @@ public class WorkoutJournalUI extends Application {
                     LocalDate sunday = today.with(nextOrSame(SUNDAY));
                     StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
                     primaryPane.setCenter(oneWeek);
+                    primaryPane.setBottom(toggleWeekBox);
                     usernameInput.clear();
                     passwordInput.clear();
                     stage.setScene(primaryScene);
@@ -413,8 +428,23 @@ public class WorkoutJournalUI extends Application {
         });
         
         previousMonthButton.setOnAction((event) -> {
-            date = date.minusMonths(1);
-            
+            try {
+                date = date.minusMonths(1);
+                BorderPane monthlyStats = uiTools.drawMonthlyStats(date);
+                primaryPane.setCenter(monthlyStats);
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        nextMonthButton.setOnAction((event) -> {
+            try {
+                date = date.plusMonths(1);
+                BorderPane monthlyStats = uiTools.drawMonthlyStats(date);
+                primaryPane.setCenter(monthlyStats);
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
         stage.setScene(loginScene);
