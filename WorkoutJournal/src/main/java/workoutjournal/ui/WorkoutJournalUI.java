@@ -109,22 +109,6 @@ public class WorkoutJournalUI extends Application {
         Button createNewUserButton = new Button("Create new user");
         Label userCreationError = new Label("");
         
-        newUserPane.add(newUserInstruction, 0, 0);
-        newUserPane.add(setUsernameLabel, 0, 1);
-        newUserPane.add(setUsernameInput, 1, 1);
-        newUserPane.add(setPasswordLabel, 0, 2);
-        newUserPane.add(setPasswordInput, 1, 2);
-        newUserPane.add(maxHeartRateLabel, 0, 3);
-        newUserPane.add(maxHeartRateInput, 1, 3);
-        newUserPane.add(countMaxHeartRate, 0, 4);
-        newUserPane.add(age, 0, 5);
-        newUserPane.add(ageInput, 1, 5);
-        newUserPane.add(sex, 0, 6);
-        newUserPane.add(sexes, 1, 6);
-        newUserPane.add(countMaxHeartRateButton, 1, 7);
-        newUserPane.add(createNewUserButton, 1, 8);
-        newUserPane.add(userCreationError, 0, 9);
-        
         Scene newUserScene = new Scene(newUserPane);
         
         // Primary scene, actions menu on top and changing views depending of the action
@@ -150,6 +134,24 @@ public class WorkoutJournalUI extends Application {
         actionsMenu.getMenus().addAll(settings, exercises);
         primaryPane.setTop(actionsMenu);
         Scene primaryScene = new Scene(primaryPane);
+        
+        // View for updating max heart rate
+        
+        GridPane updateMaxHeartRatePane = new GridPane();
+        Label updateMaxHeartRateLabel = new Label("Update max heart rate");
+        Button updateMaxHeartRateButton = new Button("Update");
+        Label updateMaxHeartRateStatus = new Label("");
+        
+        // View for changing password
+        
+        GridPane changePasswordPane = new GridPane();
+        Label changePasswordLabel = new Label("Change password");
+        Label oldPasswordLabel = new Label("Old password");
+        PasswordField oldPasswordInput = new PasswordField();
+        Label newPasswordLabel = new Label("New password");
+        PasswordField newPasswordInput = new PasswordField();
+        Button changePasswordButton = new Button("Change");
+        Label changePasswordStatus = new Label("");
         
         // View for adding an exercise
         
@@ -199,6 +201,32 @@ public class WorkoutJournalUI extends Application {
         monthlyStats.getChildren().addAll(monthlyDistanceLabel, monthlyDevelopmentLabel);
         
         // Menu actions
+                
+        updateMaxHeartRate.setOnAction((event) -> {
+            updateMaxHeartRatePane.add(updateMaxHeartRateLabel, 0, 0);
+            updateMaxHeartRatePane.add(maxHeartRateLabel, 0, 1);
+            updateMaxHeartRatePane.add(maxHeartRateInput, 1, 1);
+            updateMaxHeartRatePane.add(countMaxHeartRate, 0, 2);
+            updateMaxHeartRatePane.add(age, 0, 3);
+            updateMaxHeartRatePane.add(ageInput, 1, 3);
+            updateMaxHeartRatePane.add(sex, 0, 4);
+            updateMaxHeartRatePane.add(sexes, 1, 4);
+            updateMaxHeartRatePane.add(countMaxHeartRateButton, 1, 5);
+            updateMaxHeartRatePane.add(updateMaxHeartRateButton, 1, 6);
+            updateMaxHeartRatePane.add(updateMaxHeartRateStatus, 0, 7);
+            primaryPane.setCenter(updateMaxHeartRatePane);
+        });
+        
+        changePassword.setOnAction((event) -> {
+            changePasswordPane.add(changePasswordLabel, 0, 0);
+            changePasswordPane.add(oldPasswordLabel, 0, 1);
+            changePasswordPane.add(oldPasswordInput, 1, 1);
+            changePasswordPane.add(newPasswordLabel, 0, 2);
+            changePasswordPane.add(newPasswordInput, 1, 2);
+            changePasswordPane.add(changePasswordButton, 1, 3);
+            changePasswordPane.add(changePasswordStatus, 1, 4);
+            primaryPane.setCenter(changePasswordPane);
+        });
         
         logout.setOnAction((event) -> {
             tools.logout();
@@ -262,6 +290,21 @@ public class WorkoutJournalUI extends Application {
         });
         
         newUserButton.setOnAction((event) -> {
+            newUserPane.add(newUserInstruction, 0, 0);
+            newUserPane.add(setUsernameLabel, 0, 1);
+            newUserPane.add(setUsernameInput, 1, 1);
+            newUserPane.add(setPasswordLabel, 0, 2);
+            newUserPane.add(setPasswordInput, 1, 2);
+            newUserPane.add(maxHeartRateLabel, 0, 3);
+            newUserPane.add(maxHeartRateInput, 1, 3);
+            newUserPane.add(countMaxHeartRate, 0, 4);
+            newUserPane.add(age, 0, 5);
+            newUserPane.add(ageInput, 1, 5);
+            newUserPane.add(sex, 0, 6);
+            newUserPane.add(sexes, 1, 6);
+            newUserPane.add(countMaxHeartRateButton, 1, 7);
+            newUserPane.add(createNewUserButton, 1, 8);
+            newUserPane.add(userCreationError, 0, 9);
             stage.setScene(newUserScene);
         });
         
@@ -285,6 +328,29 @@ public class WorkoutJournalUI extends Application {
                 }
             } catch (Exception ex) {
                 userCreationError.setText("Database connection is lost or something unexpected happened. Try again later");
+            }
+        });
+        
+        updateMaxHeartRateButton.setOnAction((event) -> {
+            try {
+                tools.updateMaxHeartRate(maxHeartRateInput.getValue());
+                updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
+        changePasswordButton.setOnAction((event) -> {
+            try {
+                if (newPasswordInput.getText().length() < 3) {
+                    changePasswordStatus.setText("New password has to be at least 3 characters long.");
+                } else if (tools.changePassword(oldPasswordInput.getText(), newPasswordInput.getText())) {
+                    changePasswordStatus.setText("Password changed successfully.");
+                } else {
+                    changePasswordStatus.setText("Incorrect old password.");
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         
