@@ -12,4 +12,6 @@ pvm | tunnit | tehdyt asiat
 21.4. | 6 | poikkeusten käsittelyt paremmiksi, sekvenssikaavio, jar, release
 27.4 | 3 | viikkograafi toimimaan usealla päiväharjoituksella
 28.4. | 11 | alustava kuukausinäkymä, lisää testejä, javadoc, käyttöohje, arkkitehtuurikuvaus, uusi release
-yhteensä | 69 | 
+7.5. | 6 | toiminnallisuudet käyttäjähallintaan
+8.5 | 10 | toiminnallisuuksia harjoitustilastoihin
+yhteensä | 85 | 
