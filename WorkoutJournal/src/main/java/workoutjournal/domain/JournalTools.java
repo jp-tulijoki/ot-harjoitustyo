@@ -212,28 +212,6 @@ public class JournalTools {
     }
     
     /**
-     * Method counts total distance covered in a certain month.
-     * @param date the date value currently defined in the user inteface. (As 
-     * total distance can not be counted for the current month, the method will
-     * go one month backwards.)
-     * @return returns total distance covered
-     * @throws Exception 
-     */
-    public int countMonthlyDistance(LocalDate date) throws Exception {
-        LocalDate firstDayOfMonth = date.minusMonths(1).withDayOfMonth(1);
-        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
-        ArrayList<Exercise> exercises = getExerciseList(firstDayOfMonth, lastDayOfMonth);
-        int totalDistance = 0;
-        for (Exercise exercise : exercises) {
-            if (exercise.getType() == 2) {
-                continue;
-            }
-            totalDistance += exercise.getDistance();
-        }
-        return totalDistance;
-    }
-    
-    /**
      * Method counts the development rate in total distance covered compared to
      * the previous month.
      * @param currentMonthDistance total distance of the currently processed
@@ -243,11 +221,11 @@ public class JournalTools {
      * there would be division by zero due to no endurance training during 
      * previous month.
      */
-    public double countMonthlyDistanceDevelopment(int currentMonthDistance, int previousMonthDistance) {
-        if (previousMonthDistance == 0) {
+    public double countMonthlyDistanceDevelopment(double currentMonthDistance, double previousMonthDistance) {
+        if (previousMonthDistance == 0.0) {
             return Double.NaN;
         }
-        return (double) currentMonthDistance / previousMonthDistance - 1; 
+        return Math.round((currentMonthDistance / previousMonthDistance - 1) * 100); 
     }
     
     public double[][] countMonthlyStats(LocalDate date) throws Exception {

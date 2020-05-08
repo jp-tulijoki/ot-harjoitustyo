@@ -251,16 +251,16 @@ public class WorkoutJournalUI extends Application {
         
         monthlySummary.setOnAction((event) -> {
             try {
-                int currentMonthDistance = tools.countMonthlyDistance(today);
-                int previousMonthDistance = tools.countMonthlyDistance(today.minusMonths(1));
-                double development = tools.countMonthlyDistanceDevelopment(currentMonthDistance, previousMonthDistance);
-                monthlyDistanceLabel.setText("Your total distance covered in " + today.minusMonths(1).getMonth() + " " + today.minusMonths(1).getYear() + " was " + currentMonthDistance + " kilometers.");
+                double[][] currentMonthStats = tools.countMonthlyStats(today);
+                double[][] previousMonthStats = tools.countMonthlyStats(today.minusMonths(1));
+                double development = tools.countMonthlyDistanceDevelopment(currentMonthStats[5][1], previousMonthStats[5][1]);
+                monthlyDistanceLabel.setText("Your total distance covered in " + today.minusMonths(1).getMonth() + " " + today.minusMonths(1).getYear() + " was " + currentMonthStats[5][1] + " kilometers.");
                 if (isNaN(development)) {
                     monthlyDevelopmentLabel.setText("As there are no running exercises in the month before, distance development can not be counted");
                 } else if (development < 0) {
-                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered decreased by " + Math.round(Math.abs(development) * 100) + " %.");
+                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered decreased by " + Math.abs(development) + " %.");
                 } else {
-                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered increased by " + Math.round(development * 100) + " %. Good job!");
+                    monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered increased by " + development + " %. Good job!");
                 }
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
