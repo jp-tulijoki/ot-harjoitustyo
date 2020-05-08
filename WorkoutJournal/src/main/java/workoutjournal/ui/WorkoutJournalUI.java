@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.*;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
@@ -135,6 +137,13 @@ public class WorkoutJournalUI extends Application {
         primaryPane.setTop(actionsMenu);
         Scene primaryScene = new Scene(primaryPane);
         
+        // Toggle week buttons
+        
+        HBox toggleWeekBox = new HBox();
+        Button previousWeekButton = new Button("Previous week");
+        Button nextWeekButton = new Button("Next week");
+        toggleWeekBox.getChildren().addAll(previousWeekButton, nextWeekButton);
+        
         // View for updating max heart rate
         
         GridPane updateMaxHeartRatePane = new GridPane();
@@ -190,7 +199,7 @@ public class WorkoutJournalUI extends Application {
         addExercisePane.add(addExerciseButton, 1, 7);
         addExercisePane.add(addExerciseConfirmation, 0, 8);
         
-        // Montly summary
+        // Monthly summary
         
         VBox monthlyStats = new VBox();
         monthlyStats.setSpacing(10);
@@ -199,6 +208,8 @@ public class WorkoutJournalUI extends Application {
         Label monthlyDevelopmentLabel = new Label("");
         
         monthlyStats.getChildren().addAll(monthlyDistanceLabel, monthlyDevelopmentLabel);
+        
+        
         
         // Menu actions
                 
@@ -243,6 +254,9 @@ public class WorkoutJournalUI extends Application {
                 LocalDate sunday = today.with(nextOrSame(SUNDAY));
                 StackedBarChart <String, Number> oneWeek = drawOneWeek(monday, sunday);
                 primaryPane.setCenter(oneWeek);
+                primaryPane.setBottom(toggleWeekBox);
+                primaryPane.setLeft(null);
+                primaryPane.setRight(null);
                 stage.setScene(primaryScene);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -250,6 +264,7 @@ public class WorkoutJournalUI extends Application {
         });
         
         monthlySummary.setOnAction((event) -> {
+            
             try {
                 double[][] currentMonthStats = tools.countMonthlyStats(today);
                 double[][] previousMonthStats = tools.countMonthlyStats(today.minusMonths(1));
@@ -262,10 +277,17 @@ public class WorkoutJournalUI extends Application {
                 } else {
                     monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered increased by " + development + " %. Good job!");
                 }
+                PieChart trainingsDistribution = monthlyTrainingsDistribution(currentMonthStats);
+                BarChart speedStats = monthlySpeedStats(currentMonthStats, previousMonthStats); 
+                primaryPane.setBottom(monthlyStats);
+                primaryPane.setLeft(trainingsDistribution);
+                primaryPane.setRight(speedStats);
+                primaryPane.setCenter(null);
+                
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-            primaryPane.setCenter(monthlyStats);
+            
         });
         
         // Actions for buttons
@@ -475,6 +497,52 @@ public class WorkoutJournalUI extends Application {
         } else {
             return 6;
         }   
+    }
+    
+    public PieChart monthlyTrainingsDistribution(double[][] stats) {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+            new PieChart.Data("Strength", stats[0][0]),
+            new PieChart.Data("Light", stats[1][0]),
+            new PieChart.Data("Moderate", stats[2][0]),
+            new PieChart.Data("Hard", stats[3][0]),
+            new PieChart.Data("Maximum", stats[3][0]));
+        
+        PieChart chart = new PieChart(pieChartData);
+        int i = 0;
+        for (PieChart.Data data : pieChartData) {
+            data.getNode().setStyle("-fx-pie-color: " + IntensityLevel.values()[i].getColor());
+            i++;
+        }
+        Legend legend = (Legend)chart.lookup(".chart-legend");
+        legend.getItems().clear();
+        Legend.LegendItem light = new Legend.LegendItem("light", new Rectangle(10,10,Color.LIGHTGREEN));
+        Legend.LegendItem moderate = new Legend.LegendItem("moderate", new Rectangle(10,10,Color.YELLOW));
+        Legend.LegendItem hard = new Legend.LegendItem("hard", new Rectangle(10,10,Color.ORANGE));
+        Legend.LegendItem maximum = new Legend.LegendItem("maximum", new Rectangle(10,10,Color.RED));
+        Legend.LegendItem strength = new Legend.LegendItem("strength", new Rectangle(10,10,Color.SLATEGRAY));
+        legend.getItems().addAll(light, moderate, hard, maximum, strength);
+        
+        return chart;
+    }
+    
+    public BarChart<String, Number> monthlySpeedStats(double[][] currentMonthStats, double[][] previousMonthStats) {
+        CategoryAxis intensityLevels = new CategoryAxis();
+        intensityLevels.setLabel("Intensity level");
+        NumberAxis avgSpeed = new NumberAxis();
+        avgSpeed.setLabel("Average speed");
+        BarChart<String, Number> chart = new BarChart(intensityLevels, avgSpeed);
+        
+        XYChart.Series currentMonth = new XYChart.Series<>();
+        XYChart.Series previousMonth = new XYChart.Series<>();
+        
+        for (int i = 1; i <=4; i++) {
+            currentMonth.getData().add(new XYChart.Data<>(IntensityLevel.values()[i].toString(), currentMonthStats[i][2]));
+            previousMonth.getData().add(new XYChart.Data<>(IntensityLevel.values()[i].toString(), previousMonthStats[i][2]));
+        }
+        
+        chart.getData().addAll(currentMonth, previousMonth);
+        
+        return chart;
     }
     
     public static void main(String[] args) throws SQLException {
