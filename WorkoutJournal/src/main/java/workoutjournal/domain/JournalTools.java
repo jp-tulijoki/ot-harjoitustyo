@@ -249,4 +249,28 @@ public class JournalTools {
         }
         return (double) currentMonthDistance / previousMonthDistance - 1; 
     }
+    
+    public double[][] countMonthlyStats(LocalDate date) throws Exception {
+        double[][] stats = new double[6][3];
+        LocalDate firstDayOfMonth = date.minusMonths(1).withDayOfMonth(1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+        ArrayList<Exercise> exercises = getExerciseList(firstDayOfMonth, lastDayOfMonth);
+        for (Exercise exercise : exercises) {
+            IntensityLevel intensityLevel = countIntensityLevel(exercise);
+            if (exercise.getType() == 2) {
+                stats[intensityLevel.ordinal()][0] += exercise.getDuration();
+            } else {
+                stats[intensityLevel.ordinal()][0] += exercise.getDuration();
+                stats[intensityLevel.ordinal()][1] += exercise.getDistance();
+            }
+        }
+        for (int i = 1; i <= 4; i++) {
+            if (stats[i][1] != 0) {
+                stats[i][2] = stats[i][0] / stats[i][1];
+            }
+            stats[5][0] += stats[i][0];
+            stats[5][1] += stats[i][1];
+        }
+        return stats;
+    } 
 }

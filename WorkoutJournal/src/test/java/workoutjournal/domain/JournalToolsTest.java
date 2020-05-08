@@ -175,6 +175,28 @@ public class JournalToolsTest {
     }
     
     @Test
+    public void monthlyStatsWorksProperly() throws Exception {
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 12, 120, "easy jogging that should not be included in this count");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 60, 12, 150, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 40, 10, 180, "hard running");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 3, 1, 192, "one kilometer at full speed");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 2, 60, 0, 0, "strength");
+        double[][] stats = tools.countMonthlyStats(LocalDate.now());
+        assertEquals(0, stats[1][2], 0.01);
+        assertEquals(5, stats[2][2], 0.01);
+        assertEquals(4, stats[3][2], 0.01);
+        assertEquals(3, stats[4][2], 0.01);
+        assertEquals(60, stats[0][0], 0.01);
+        assertEquals(103, stats[5][0], 0.01);
+        assertEquals(23, stats[5][1], 0.01);
+        tools.logout();
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
     public void monthlyDistanceDevelopmentIsCountedProperly() {
         assertEquals(0.5, tools.countMonthlyDistanceDevelopment(300, 200), 0.01);
         assertEquals(-0.25, tools.countMonthlyDistanceDevelopment(150, 200), 0.01);
