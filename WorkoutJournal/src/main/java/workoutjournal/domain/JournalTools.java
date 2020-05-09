@@ -197,17 +197,17 @@ public class JournalTools {
      */
     public IntensityLevel countIntensityLevel(Exercise exercise) {
         if (exercise.getType() == 2) {
-            return IntensityLevel.STRENGTH;
+            return IntensityLevel.strength;
         }
         int intensity = 100 * exercise.getAvgHeartRate() / loggedIn.getMaxHeartRate();
         if (intensity < 75) {
-            return IntensityLevel.LIGHT;
+            return IntensityLevel.light;
         } else if (intensity < 85) {
-            return IntensityLevel.MODERATE;
+            return IntensityLevel.moderate;
         } else if (intensity < 95) {
-            return IntensityLevel.HARD;
+            return IntensityLevel.hard;
         } else {
-            return IntensityLevel.MAXIMUM;
+            return IntensityLevel.maximum;
         }
     }
     

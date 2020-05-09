@@ -250,24 +250,7 @@ public class WorkoutJournalUI extends Application {
         
         previousExercises.setOnAction((event) -> {
             try {
-                TableView<Exercise> exerciseTable = new TableView();
-                TableColumn<Exercise, LocalDate> dateColumn = new TableColumn("Date");
-                dateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, LocalDate>("date"));
-                TableColumn<Exercise, Integer> typeColumn = new TableColumn("Type");
-                typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
-                TableColumn<Exercise, Integer> durationColumn = new TableColumn("Duration");
-                durationColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("duration"));
-                TableColumn<Exercise, Integer> distanceColumn = new TableColumn("Distance");
-                distanceColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("distance"));
-                TableColumn <Exercise, Integer> avgHeartRateColumn = new TableColumn("Average heart rate");
-                avgHeartRateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("avgHeartRate"));
-                TableColumn<Exercise, String> descriptionColumn = new TableColumn("Description");
-                descriptionColumn.setCellValueFactory(new PropertyValueFactory<Exercise, String>("type"));
-                typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
-                exerciseTable.getColumns().addAll(dateColumn, typeColumn, durationColumn, distanceColumn, avgHeartRateColumn, descriptionColumn);
-                ArrayList<Exercise> exerciseList = jTools.getExerciseList(date.minusMonths(1), date.plusMonths(1));
-                ObservableList<Exercise> exerciseData = FXCollections.observableArrayList(exerciseList);
-                exerciseTable.setItems(exerciseData);
+                TableView exerciseTable = uiTools.drawExerciseTable(date);
                 primaryPane.setCenter(exerciseTable);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,11 +5,11 @@ package workoutjournal.domain;
  * the statistics.
  */
 public enum IntensityLevel {
-    STRENGTH("slategray"),
-    LIGHT("lightgreen"),
-    MODERATE("yellow"),
-    HARD("orange"),
-    MAXIMUM("red");
+    strength("slategray"),
+    light("lightgreen"),
+    moderate("yellow"),
+    hard("orange"),
+    maximum("red");
     
     private String color;
     

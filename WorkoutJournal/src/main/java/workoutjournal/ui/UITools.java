@@ -25,6 +25,9 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -216,5 +219,27 @@ public class UITools {
         monthlyStats.setBottom(monthlyAnalysis);
         
         return monthlyStats;
+    }
+    
+    public TableView<Exercise> drawExerciseTable(LocalDate date) throws Exception {
+        TableView<Exercise> exerciseTable = new TableView();
+        TableColumn<Exercise, LocalDate> dateColumn = new TableColumn("Date");
+        dateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, LocalDate>("date"));
+        TableColumn<Exercise, Integer> typeColumn = new TableColumn("Type");
+        typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+        TableColumn<Exercise, Integer> durationColumn = new TableColumn("Duration");
+        durationColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("duration"));
+        TableColumn<Exercise, Integer> distanceColumn = new TableColumn("Distance");
+        distanceColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("distance"));
+        TableColumn <Exercise, Integer> avgHeartRateColumn = new TableColumn("Average heart rate");
+        avgHeartRateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("avgHeartRate"));
+        TableColumn<Exercise, String> descriptionColumn = new TableColumn("Description");
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<Exercise, String>("type"));
+        typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+        exerciseTable.getColumns().addAll(dateColumn, typeColumn, durationColumn, distanceColumn, avgHeartRateColumn, descriptionColumn);
+        ArrayList<Exercise> exerciseList = tools.getExerciseList(date.minusMonths(1), date.plusMonths(1));
+        ObservableList<Exercise> exerciseData = FXCollections.observableArrayList(exerciseList);
+        exerciseTable.setItems(exerciseData);
+        return exerciseTable;  
     }
 }
