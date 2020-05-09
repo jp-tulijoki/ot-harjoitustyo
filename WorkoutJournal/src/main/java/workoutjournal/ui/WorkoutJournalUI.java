@@ -1,31 +1,15 @@
 package workoutjournal.ui;
-import workoutjournal.dao.ExerciseDAO;
-import workoutjournal.dao.DBUserDAO;
-import workoutjournal.dao.UserDAO;
-import workoutjournal.dao.DBExerciseDAO;
-import com.sun.javafx.charts.Legend;
+import workoutjournal.dao.*;
 import com.sun.javafx.scene.control.IntegerField;
-import static java.lang.Double.isNaN;
 import java.sql.*;
-import static java.time.DayOfWeek.*;
 import java.time.LocalDate;
-import static java.time.temporal.TemporalAdjusters.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.*;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.*;
 import javafx.scene.Scene;
-import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import workoutjournal.domain.*;
 
 public class WorkoutJournalUI extends Application {
@@ -35,7 +19,6 @@ public class WorkoutJournalUI extends Application {
     private ExerciseDAO exerciseDAO; 
     private JournalTools jTools;
     private UITools uiTools;
-    private LocalDate today;
     private LocalDate date;
     
     public void init() throws SQLException, Exception {
@@ -52,7 +35,6 @@ public class WorkoutJournalUI extends Application {
         
         this.jTools = new JournalTools(userDAO, exerciseDAO);
         this.uiTools = new UITools(jTools);
-        this.today = LocalDate.now();
         this.date = LocalDate.now();
     }
     
@@ -114,14 +96,32 @@ public class WorkoutJournalUI extends Application {
         sexes.getSelectionModel().selectFirst();
         Button countMaxHeartRateButton = new Button("Count max heart rate");
         Button createNewUserButton = new Button("Create new user");
+        Button returnToLoginViewButton = new Button("Return to login view");
         Label userCreationError = new Label("");
+        
+        newUserPane.add(newUserInstruction, 0, 0);
+        newUserPane.add(setUsernameLabel, 0, 1);
+        newUserPane.add(setUsernameInput, 1, 1);
+        newUserPane.add(setPasswordLabel, 0, 2);
+        newUserPane.add(setPasswordInput, 1, 2);
+        newUserPane.add(maxHeartRateLabel, 0, 3);
+        newUserPane.add(maxHeartRateInput, 1, 3);
+        newUserPane.add(countMaxHeartRate, 0, 4);
+        newUserPane.add(age, 0, 5);
+        newUserPane.add(ageInput, 1, 5);
+        newUserPane.add(sex, 0, 6);
+        newUserPane.add(sexes, 1, 6);
+        newUserPane.add(countMaxHeartRateButton, 1, 7);
+        newUserPane.add(createNewUserButton, 1, 8);
+        newUserPane.add(returnToLoginViewButton, 1, 9);
+        newUserPane.add(userCreationError, 0, 10);
         
         Scene newUserScene = new Scene(newUserPane);
         
         // Primary scene, actions menu on top and changing views depending of the action
         
         BorderPane primaryPane = new BorderPane();
-        primaryPane.setPrefSize(720, 360);
+        primaryPane.setPrefSize(1080, 540);
         
         MenuBar actionsMenu = new MenuBar();
         
@@ -142,60 +142,26 @@ public class WorkoutJournalUI extends Application {
         primaryPane.setTop(actionsMenu);
         Scene primaryScene = new Scene(primaryPane);
         
-        // View for updating max heart rate
+        // Select date tools for searching exercises
         
-        GridPane updateMaxHeartRatePane = new GridPane();
-        Label updateMaxHeartRateLabel = new Label("Update max heart rate");
-        Button updateMaxHeartRateButton = new Button("Update");
-        Label updateMaxHeartRateStatus = new Label("");
+        GridPane sortExercisePane = new GridPane();
+        Label sortExerciseLabel = new Label("Sort exercises by selecting days.");
+        Label beginDateLabel = new Label("Begin date: ");
+        DatePicker beginDatePicker = new DatePicker(LocalDate.now());
+        beginDatePicker.getEditor().setDisable(true);
+        Label endDateLabel = new Label("End date: ");
+        DatePicker endDatePicker = new DatePicker(LocalDate.now());
+        endDatePicker.getEditor().setDisable(true);
+        Button sortExercisesButton = new Button("Sort exercises by date");
+        Label selectDateError = new Label("");
         
-        // View for changing password
-        
-        GridPane changePasswordPane = new GridPane();
-        Label changePasswordLabel = new Label("Change password");
-        Label oldPasswordLabel = new Label("Old password");
-        PasswordField oldPasswordInput = new PasswordField();
-        Label newPasswordLabel = new Label("New password");
-        PasswordField newPasswordInput = new PasswordField();
-        Button changePasswordButton = new Button("Change");
-        Label changePasswordStatus = new Label("");
-        
-        // View for adding an exercise
-        
-        GridPane addExercisePane = new GridPane();
-        
-        Label addExerciseLabel = new Label("Add new exercise");
-        Label dateLabel = new Label("Date:");
-        DatePicker datePicker = new DatePicker();
-        Label typeLabel = new Label("Type:");
-        ChoiceBox<Type> types = new ChoiceBox();
-        types.getItems().addAll(Type.strength, Type.endurance);
-        Label durationLabel = new Label("Duration (minutes):");
-        IntegerField durationInput = new IntegerField();
-        Label distanceLabel = new Label("Distance (kilometers):");
-        IntegerField distanceInput = new IntegerField();
-        Label avgHeartRateLabel = new Label("Average heart rate:");
-        IntegerField avgHeartRateInput = new IntegerField();
-        Label descriptionLabel = new Label("Description:");
-        TextField descriptionInput = new TextField();
-        Button addExerciseButton = new Button("Add exercise");
-        Label addExerciseConfirmation = new Label("");
-        
-        addExercisePane.add(addExerciseLabel, 0, 0);
-        addExercisePane.add(dateLabel, 0, 1);
-        addExercisePane.add(datePicker, 1, 1);
-        addExercisePane.add(typeLabel, 0, 2);
-        addExercisePane.add(types, 1, 2);
-        addExercisePane.add(durationLabel, 0, 3);
-        addExercisePane.add(durationInput, 1, 3);
-        addExercisePane.add(distanceLabel, 0, 4);
-        addExercisePane.add(distanceInput, 1, 4);
-        addExercisePane.add(avgHeartRateLabel, 0, 5);
-        addExercisePane.add(avgHeartRateInput, 1, 5);
-        addExercisePane.add(descriptionLabel, 0, 6);
-        addExercisePane.add(descriptionInput, 1, 6);
-        addExercisePane.add(addExerciseButton, 1, 7);
-        addExercisePane.add(addExerciseConfirmation, 0, 8);
+        sortExercisePane.add(sortExerciseLabel, 0, 0);
+        sortExercisePane.add(beginDateLabel, 0, 1);
+        sortExercisePane.add(beginDatePicker, 1, 1);
+        sortExercisePane.add(endDateLabel, 2, 1);
+        sortExercisePane.add(endDatePicker, 3, 1);
+        sortExercisePane.add(sortExercisesButton, 0, 2);
+        sortExercisePane.add(selectDateError, 1, 2);
         
         // Toggle week buttons for weekly summary
         
@@ -214,29 +180,13 @@ public class WorkoutJournalUI extends Application {
         // Menu actions
                 
         updateMaxHeartRate.setOnAction((event) -> {
-            updateMaxHeartRatePane.add(updateMaxHeartRateLabel, 0, 0);
-            updateMaxHeartRatePane.add(maxHeartRateLabel, 0, 1);
-            updateMaxHeartRatePane.add(maxHeartRateInput, 1, 1);
-            updateMaxHeartRatePane.add(countMaxHeartRate, 0, 2);
-            updateMaxHeartRatePane.add(age, 0, 3);
-            updateMaxHeartRatePane.add(ageInput, 1, 3);
-            updateMaxHeartRatePane.add(sex, 0, 4);
-            updateMaxHeartRatePane.add(sexes, 1, 4);
-            updateMaxHeartRatePane.add(countMaxHeartRateButton, 1, 5);
-            updateMaxHeartRatePane.add(updateMaxHeartRateButton, 1, 6);
-            updateMaxHeartRatePane.add(updateMaxHeartRateStatus, 0, 7);
-            primaryPane.setCenter(updateMaxHeartRatePane);
+            GridPane updateMaxHeartRateView = uiTools.updateMaxHeartRateView();
+            primaryPane.setCenter(updateMaxHeartRateView);
         });
         
         changePassword.setOnAction((event) -> {
-            changePasswordPane.add(changePasswordLabel, 0, 0);
-            changePasswordPane.add(oldPasswordLabel, 0, 1);
-            changePasswordPane.add(oldPasswordInput, 1, 1);
-            changePasswordPane.add(newPasswordLabel, 0, 2);
-            changePasswordPane.add(newPasswordInput, 1, 2);
-            changePasswordPane.add(changePasswordButton, 1, 3);
-            changePasswordPane.add(changePasswordStatus, 1, 4);
-            primaryPane.setCenter(changePasswordPane);
+            GridPane changePasswordView = uiTools.changePasswordView();
+            primaryPane.setCenter(changePasswordView);
         });
         
         logout.setOnAction((event) -> {
@@ -245,13 +195,16 @@ public class WorkoutJournalUI extends Application {
         });
         
         addExercise.setOnAction((event) -> {
-            primaryPane.setCenter(addExercisePane);
+            GridPane addExerciseView = uiTools.addExerciseView();
+            primaryPane.setCenter(addExerciseView);
         });
         
         previousExercises.setOnAction((event) -> {
+            date = LocalDate.now();
             try {
-                TableView exerciseTable = uiTools.drawExerciseTable(date);
+                BorderPane exerciseTable = uiTools.drawExerciseTable(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
                 primaryPane.setCenter(exerciseTable);
+                primaryPane.setBottom(sortExercisePane);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -259,21 +212,16 @@ public class WorkoutJournalUI extends Application {
         });
         
         weeklySummary.setOnAction((event) -> {
-            try {
-                LocalDate monday = today.with(previousOrSame(MONDAY));
-                LocalDate sunday = today.with(nextOrSame(SUNDAY));
-                StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
-                primaryPane.setCenter(oneWeek);
-                primaryPane.setBottom(toggleWeekBox);
-                stage.setScene(primaryScene);
-            } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            date = LocalDate.now();
+            BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
+            primaryPane.setCenter(weeklySummaryView);
+            primaryPane.setBottom(toggleWeekBox);
         });
         
         monthlySummary.setOnAction((event) -> {
+            date = LocalDate.now();
             try {
-                BorderPane monthlySummaryPane = uiTools.drawMonthlyStats(today);
+                BorderPane monthlySummaryPane = uiTools.drawMonthlyStats(date);
                 primaryPane.setCenter(monthlySummaryPane);
                 primaryPane.setBottom(toggleMonthBox);
             } catch (Exception ex) {
@@ -287,13 +235,11 @@ public class WorkoutJournalUI extends Application {
         loginButton.setOnAction((event) -> {
             try {
                 if (jTools.login(usernameInput.getText(), passwordInput.getText())) {
-                    LocalDate monday = today.with(previousOrSame(MONDAY));
-                    LocalDate sunday = today.with(nextOrSame(SUNDAY));
-                    StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
-                    primaryPane.setCenter(oneWeek);
-                    primaryPane.setBottom(toggleWeekBox);
+                    BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
                     usernameInput.clear();
                     passwordInput.clear();
+                    primaryPane.setCenter(weeklySummaryView);
+                    primaryPane.setBottom(toggleWeekBox);
                     stage.setScene(primaryScene);
                 } else {
                     loginError.setText("User not found or invalid password.");
@@ -305,21 +251,6 @@ public class WorkoutJournalUI extends Application {
         });
         
         newUserButton.setOnAction((event) -> {
-            newUserPane.add(newUserInstruction, 0, 0);
-            newUserPane.add(setUsernameLabel, 0, 1);
-            newUserPane.add(setUsernameInput, 1, 1);
-            newUserPane.add(setPasswordLabel, 0, 2);
-            newUserPane.add(setPasswordInput, 1, 2);
-            newUserPane.add(maxHeartRateLabel, 0, 3);
-            newUserPane.add(maxHeartRateInput, 1, 3);
-            newUserPane.add(countMaxHeartRate, 0, 4);
-            newUserPane.add(age, 0, 5);
-            newUserPane.add(ageInput, 1, 5);
-            newUserPane.add(sex, 0, 6);
-            newUserPane.add(sexes, 1, 6);
-            newUserPane.add(countMaxHeartRateButton, 1, 7);
-            newUserPane.add(createNewUserButton, 1, 8);
-            newUserPane.add(userCreationError, 0, 9);
             stage.setScene(newUserScene);
         });
         
@@ -346,53 +277,30 @@ public class WorkoutJournalUI extends Application {
             }
         });
         
-        updateMaxHeartRateButton.setOnAction((event) -> {
+        returnToLoginViewButton.setOnAction((event) -> {
+            stage.setScene(loginScene);
+        });
+        
+        sortExercisesButton.setOnAction((event) -> {
             try {
-                jTools.updateMaxHeartRate(maxHeartRateInput.getValue());
-                updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
+            if (endDatePicker.getValue().isBefore(beginDatePicker.getValue())) {
+                selectDateError.setText("End date must not be before begin date.");
+            } else {
+                BorderPane exerciseTable = uiTools.drawExerciseTable(beginDatePicker.getValue(), endDatePicker.getValue());
+                primaryPane.setCenter(exerciseTable);
+                primaryPane.setBottom(sortExercisePane);
+            }
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
-        });
-        
-        changePasswordButton.setOnAction((event) -> {
-            try {
-                if (newPasswordInput.getText().length() < 3) {
-                    changePasswordStatus.setText("New password has to be at least 3 characters long.");
-                } else if (jTools.changePassword(oldPasswordInput.getText(), newPasswordInput.getText())) {
-                    changePasswordStatus.setText("Password changed successfully.");
-                } else {
-                    changePasswordStatus.setText("Incorrect old password.");
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        
-        addExerciseButton.setOnAction((event) -> {
-//            int type = 1;
-//            if (types.getValue().equals("strength")) {
-//                type = 2;
-//            }
-            try {
-                jTools.addExercise(jTools.getLoggedUser().getId(), datePicker.getValue(), types.getValue(), durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
-            } catch (Exception ex) {
-                addExerciseConfirmation.setText("Database connection lost. Try again later.");
-            }
-            addExerciseConfirmation.setText("Exercise added succesfully");
-            durationInput.setValue(0);
-            distanceInput.setValue(0);
-            avgHeartRateInput.setValue(0);
-            descriptionInput.clear();
         });
         
         previousWeekButton.setOnAction((event) -> {
             try {
                 date = date.minusWeeks(1);
-                LocalDate monday = date.with(previousOrSame(MONDAY));
-                LocalDate sunday = date.with(nextOrSame(SUNDAY));
-                StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
-                primaryPane.setCenter(oneWeek);
+                BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
+                primaryPane.setCenter(weeklySummaryView);
+                primaryPane.setBottom(toggleWeekBox);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -401,10 +309,9 @@ public class WorkoutJournalUI extends Application {
         nextWeekButton.setOnAction((event) -> {
             try {
                 date = date.plusWeeks(1);
-                LocalDate monday = date.with(previousOrSame(MONDAY));
-                LocalDate sunday = date.with(nextOrSame(SUNDAY));
-                StackedBarChart <String, Number> oneWeek = uiTools.drawOneWeek(monday, sunday);
-                primaryPane.setCenter(oneWeek);
+                BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
+                primaryPane.setCenter(weeklySummaryView);
+                primaryPane.setBottom(toggleWeekBox);
             } catch (Exception ex) {
                 Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
             }

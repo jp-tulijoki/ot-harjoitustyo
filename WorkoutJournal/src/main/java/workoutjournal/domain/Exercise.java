@@ -7,6 +7,7 @@ import java.time.LocalDate;
  * in processing exercises.
  */
 public class Exercise {
+    private int id;
     private int userId;
     private LocalDate date;
     private Type type;
@@ -15,7 +16,8 @@ public class Exercise {
     private int avgHeartRate;
     private String description;
 
-    public Exercise(int userId, LocalDate date, Type type, int duration, int distance, int avgHeartRate, String description) {
+    public Exercise(int id, int userId, LocalDate date, Type type, int duration, int distance, int avgHeartRate, String description) {
+        this.id = id;
         this.userId = userId;
         this.date = date;
         this.type = type;
@@ -23,6 +25,9 @@ public class Exercise {
         this.distance = distance;
         this.avgHeartRate = avgHeartRate;
         this.description = description;
+    }
+    public int getId() {
+        return id;
     }
     
     public int getUserId() {

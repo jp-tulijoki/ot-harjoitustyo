@@ -189,6 +189,10 @@ public class JournalTools {
         return exerciseDAO.getExercises(loggedIn.getId(), dateFrom, dateTo);
     }
     
+    public void deleteExercise(int id) throws Exception {
+        exerciseDAO.deleteExercise(id);
+    }
+    
     /**
      * Method counts intensity level of endurance training.
      * @param exercise the exercise the intensity of which is counted
@@ -230,7 +234,7 @@ public class JournalTools {
     
     public double[][] countMonthlyStats(LocalDate date) throws Exception {
         double[][] stats = new double[6][3];
-        LocalDate firstDayOfMonth = date.minusMonths(1).withDayOfMonth(1);
+        LocalDate firstDayOfMonth = date.withDayOfMonth(1);
         LocalDate lastDayOfMonth = firstDayOfMonth.withDayOfMonth(firstDayOfMonth.lengthOfMonth());
         ArrayList<Exercise> exercises = getExerciseList(firstDayOfMonth, lastDayOfMonth);
         for (Exercise exercise : exercises) {
