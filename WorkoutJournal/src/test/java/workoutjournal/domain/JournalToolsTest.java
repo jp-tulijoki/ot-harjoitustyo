@@ -8,7 +8,6 @@ import workoutjournal.dao.ExerciseDAO;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -209,5 +208,35 @@ public class JournalToolsTest {
         assertEquals(50, tools.countMonthlyDistanceDevelopment(300, 200), 0.01);
         assertEquals(-25, tools.countMonthlyDistanceDevelopment(150, 200), 0.01);
         assertEquals(Double.NaN, tools.countMonthlyDistanceDevelopment(300, 0), 0.01);
+    }
+    
+    @Test
+    public void monthlyAnalysisWorksProperly() throws Exception {
+        tools.createUser("mikko95", "password", 195);
+        tools.login("mikko95", "password");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 180, 30, 140, "long distance");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 12, 130, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 12, 130, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 30, 7, 160, "relaxed speed exercise");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 40, 10, 180, "hard running");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 3, 1, 192, "one kilometer at full speed");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.strength, 60, 0, 0, "strength");
+        double[][] stats = tools.countMonthlyStats(LocalDate.now());
+        boolean[] analysis = tools.monthlyAnalysis(stats);
+        for (int i = 0; i <=2; i++) {
+            assertEquals(true, analysis[i]);
+        }
+        tools.logout();
+        tools.deleteUser("mikko95");
+        connTest.close();
+    }
+    
+    @Test
+    public void monthlyAnalysisDoesNotAllowDivisionByZero() {
+        double[][] stats = new double[6][3];
+        boolean[] analysis = tools.monthlyAnalysis(stats);
+        for (int i = 0; i <=2; i++) {
+            assertEquals(false, analysis[i]);
+        }
     }
 }

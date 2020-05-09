@@ -254,5 +254,21 @@ public class JournalTools {
             stats[5][1] += stats[i][1];
         }
         return stats;
-    } 
+    }
+    
+    public boolean[] monthlyAnalysis(double[][] monthlyStats) {
+        boolean[] analysis = new boolean[3];
+        if (monthlyStats[5][0] != 0) {
+            if (monthlyStats[1][0] / monthlyStats[5][0] > 0.8) {
+                analysis[0] = true;
+            }
+            if (monthlyStats[2][0] != 0 && monthlyStats[3][0] != 0 && monthlyStats[4][0] != 0) {
+                analysis[1] = true;
+            }
+            if (monthlyStats[0][0] / monthlyStats[5][0] > 0.15) {
+                analysis[2] = true;
+            }
+        }
+        return analysis;
+    }
 }

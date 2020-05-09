@@ -45,6 +45,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import workoutjournal.domain.Exercise;
 import workoutjournal.domain.IntensityLevel;
 import workoutjournal.domain.JournalTools;
@@ -359,22 +362,45 @@ public class UITools {
         double[][] currentMonthStats = tools.countMonthlyStats(date);
         double[][] previousMonthStats = tools.countMonthlyStats(date.minusMonths(1));
         double development = tools.countMonthlyDistanceDevelopment(currentMonthStats[5][1], previousMonthStats[5][1]);
+        boolean[] analysis = tools.monthlyAnalysis(currentMonthStats);
         
         BorderPane monthlyStats = new BorderPane();
         
         VBox monthlyAnalysis = new VBox();
-        Label monthlyDistanceLabel = new Label("Your total distance covered in " + date.getMonth() + " " + date.getYear() + " is " + currentMonthStats[5][1] + " kilometers.");
-        Label monthlyDevelopmentLabel = new Label("");
+        Text monthlyAnalysisTitle = new Text("Monthly analysis of " + date.getMonth() + " " + date.getYear() + ": ");
+        Text monthlyDistance = new Text("Your total distance covered is " + currentMonthStats[5][1] + " kilometers.");
+        Text monthlyDevelopment = new Text("");
         
-        monthlyAnalysis.getChildren().addAll(monthlyDistanceLabel, monthlyDevelopmentLabel);
-
         if (isNaN(development)) {
-            monthlyDevelopmentLabel.setText("As there are no running exercises in the month before, distance development can not be counted");
+            monthlyDevelopment.setText("As there are no running exercises in the month before, distance development can not be counted");
         } else if (development < 0) {
-            monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered decreased by " + Math.abs(development) + " %.");
+            monthlyDevelopment.setText("Compared to previous month, your total distance covered decreased by " + Math.abs(development) + " %.");
         } else {
-            monthlyDevelopmentLabel.setText("Compared to previous month, your total distance covered increased by " + development + " %. Good job!");
+            monthlyDevelopment.setText("Compared to previous month, your total distance covered increased by " + development + " %. Good job!");
         }
+        
+        Text monthlyLightRunning = new Text();
+        
+        if (analysis[0]) {
+            monthlyLightRunning.setText("The rate of light intensity running is above 80 % as it should be. ");
+        } else {
+            monthlyLightRunning.setText("The rate of light intensity running is below 80 %. Please take care that your training does not become too exhausting. ");
+        }
+        
+        Text runningExerciseVariation = new Text();
+        
+        if (analysis[1]) {
+            runningExerciseVariation.setText("There is a good variation in your faster running exercises.");
+        } else {
+            runningExerciseVariation.setText("Please take care that you vary your speed in your faster running exercises to improve your development. ");
+        }
+        Text strengthTraining = new Text();
+        
+        if (analysis[2] == false) {
+            strengthTraining.setText("Take care that you don't forget strength training.");
+        }
+        
+        monthlyAnalysis.getChildren().addAll(monthlyAnalysisTitle, monthlyDistance, monthlyDevelopment, monthlyLightRunning, runningExerciseVariation, strengthTraining);
                 
         PieChart trainingsDistribution = monthlyTrainingsDistribution(currentMonthStats);
         BarChart speedStats = monthlySpeedStats(currentMonthStats, previousMonthStats);
