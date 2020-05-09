@@ -10,5 +10,6 @@ package workoutjournal.domain;
  * @author tulijoki
  */
 public enum Type {
-    
+    endurance,
+    strength
 }

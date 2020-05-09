@@ -9,13 +9,13 @@ import java.time.LocalDate;
 public class Exercise {
     private int userId;
     private LocalDate date;
-    private int type;
+    private Type type;
     private int duration;
     private int distance;
     private int avgHeartRate;
     private String description;
 
-    public Exercise(int userId, LocalDate date, int type, int duration, int distance, int avgHeartRate, String description) {
+    public Exercise(int userId, LocalDate date, Type type, int duration, int distance, int avgHeartRate, String description) {
         this.userId = userId;
         this.date = date;
         this.type = type;
@@ -33,7 +33,7 @@ public class Exercise {
         return date;
     }
 
-    public int getType() {
+    public Type getType() {
         return type;
     }
 

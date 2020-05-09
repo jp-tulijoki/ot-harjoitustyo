@@ -173,8 +173,8 @@ public class JournalTools {
      * ExerciseDAO.
      * @throws Exception 
      */
-    public boolean addExercise(int userId, LocalDate date, int type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws Exception {
-        exerciseDAO.addExercise(userId, date, type, duration, distance, avgHeartRate, description);
+    public boolean addExercise(int userId, LocalDate date, Type type, Integer duration, Integer distance, Integer avgHeartRate, String description) throws Exception {
+        exerciseDAO.addExercise(userId, date, type.ordinal(), duration, distance, avgHeartRate, description);
         return true;
     }
     /**
@@ -196,7 +196,7 @@ public class JournalTools {
      * strength for strength training
      */
     public IntensityLevel countIntensityLevel(Exercise exercise) {
-        if (exercise.getType() == 2) {
+        if (exercise.getType() == Type.strength) {
             return IntensityLevel.strength;
         }
         int intensity = 100 * exercise.getAvgHeartRate() / loggedIn.getMaxHeartRate();
@@ -235,7 +235,7 @@ public class JournalTools {
         ArrayList<Exercise> exercises = getExerciseList(firstDayOfMonth, lastDayOfMonth);
         for (Exercise exercise : exercises) {
             IntensityLevel intensityLevel = countIntensityLevel(exercise);
-            if (exercise.getType() == 2) {
+            if (exercise.getType() == Type.strength) {
                 stats[intensityLevel.ordinal()][0] += exercise.getDuration();
             } else {
                 stats[intensityLevel.ordinal()][0] += exercise.getDuration();

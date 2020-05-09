@@ -168,8 +168,8 @@ public class WorkoutJournalUI extends Application {
         Label dateLabel = new Label("Date:");
         DatePicker datePicker = new DatePicker();
         Label typeLabel = new Label("Type:");
-        ChoiceBox<String> types = new ChoiceBox();
-        types.getItems().addAll("endurance", "strength");
+        ChoiceBox<Type> types = new ChoiceBox();
+        types.getItems().addAll(Type.strength, Type.endurance);
         Label durationLabel = new Label("Duration (minutes):");
         IntegerField durationInput = new IntegerField();
         Label distanceLabel = new Label("Distance (kilometers):");
@@ -370,12 +370,12 @@ public class WorkoutJournalUI extends Application {
         });
         
         addExerciseButton.setOnAction((event) -> {
-            int type = 1;
-            if (types.getValue().equals("strength")) {
-                type = 2;
-            }
+//            int type = 1;
+//            if (types.getValue().equals("strength")) {
+//                type = 2;
+//            }
             try {
-                jTools.addExercise(jTools.getLoggedUser().getId(), datePicker.getValue(), type, durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
+                jTools.addExercise(jTools.getLoggedUser().getId(), datePicker.getValue(), types.getValue(), durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
             } catch (Exception ex) {
                 addExerciseConfirmation.setText("Database connection lost. Try again later.");
             }

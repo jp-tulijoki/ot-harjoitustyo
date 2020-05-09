@@ -35,6 +35,7 @@ import javafx.scene.shape.Rectangle;
 import workoutjournal.domain.Exercise;
 import workoutjournal.domain.IntensityLevel;
 import workoutjournal.domain.JournalTools;
+import workoutjournal.domain.Type;
 
 /**
  *
@@ -224,18 +225,17 @@ public class UITools {
     public TableView<Exercise> drawExerciseTable(LocalDate date) throws Exception {
         TableView<Exercise> exerciseTable = new TableView();
         TableColumn<Exercise, LocalDate> dateColumn = new TableColumn("Date");
-        dateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, LocalDate>("date"));
-        TableColumn<Exercise, Integer> typeColumn = new TableColumn("Type");
-        typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory("date"));
+        TableColumn<Exercise, Type> typeColumn = new TableColumn("Type");
+        typeColumn.setCellValueFactory(new PropertyValueFactory("type"));
         TableColumn<Exercise, Integer> durationColumn = new TableColumn("Duration");
-        durationColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("duration"));
+        durationColumn.setCellValueFactory(new PropertyValueFactory("duration"));
         TableColumn<Exercise, Integer> distanceColumn = new TableColumn("Distance");
-        distanceColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("distance"));
+        distanceColumn.setCellValueFactory(new PropertyValueFactory("distance"));
         TableColumn <Exercise, Integer> avgHeartRateColumn = new TableColumn("Average heart rate");
-        avgHeartRateColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("avgHeartRate"));
+        avgHeartRateColumn.setCellValueFactory(new PropertyValueFactory("avgHeartRate"));
         TableColumn<Exercise, String> descriptionColumn = new TableColumn("Description");
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<Exercise, String>("type"));
-        typeColumn.setCellValueFactory(new PropertyValueFactory<Exercise, Integer>("type"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory("description"));
         exerciseTable.getColumns().addAll(dateColumn, typeColumn, durationColumn, distanceColumn, avgHeartRateColumn, descriptionColumn);
         ArrayList<Exercise> exerciseList = tools.getExerciseList(date.minusMonths(1), date.plusMonths(1));
         ObservableList<Exercise> exerciseData = FXCollections.observableArrayList(exerciseList);

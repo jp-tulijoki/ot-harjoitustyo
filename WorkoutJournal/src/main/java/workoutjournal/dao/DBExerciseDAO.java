@@ -3,6 +3,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import workoutjournal.domain.Exercise;
+import workoutjournal.domain.Type;
 
 /**
  * Database implementation of the ExerciseDAO.
@@ -66,7 +67,7 @@ public class DBExerciseDAO implements ExerciseDAO {
         p.setString(3, toDate + "");
         ResultSet r = p.executeQuery();
         while (r.next()) {
-            exercises.add(new Exercise(userId, LocalDate.parse(r.getString("date")), r.getInt("type"), r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
+            exercises.add(new Exercise(userId, LocalDate.parse(r.getString("date")), Type.values()[r.getInt("type")], r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
         }
         return exercises;
     }

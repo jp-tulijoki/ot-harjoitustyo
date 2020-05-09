@@ -108,7 +108,7 @@ public class JournalToolsTest {
     
     @Test
     public void addExerciseWorksProperly() throws SQLException, Exception {
-        assertEquals(true, tools.addExercise(1, LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather"));
+        assertEquals(true, tools.addExercise(1, LocalDate.now(), Type.endurance, 60, 10, 150, "relaxed jogging in good weather"));
         connTest.close();
     }
     
@@ -116,7 +116,7 @@ public class JournalToolsTest {
     public void exerciseListContainsTheExercisesOfTheSelectedPeriod() throws Exception {
         tools.createUser("mikko95", "password", 195);
         tools.login("mikko95", "password");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 150, "relaxed jogging in good weather");
         ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
         for (Exercise exercise : exercises) {
             assertEquals(true, exercise.getDate().isEqual(LocalDate.now()));
@@ -130,7 +130,7 @@ public class JournalToolsTest {
     public void exerciseListDoesNotContainExercisesOutsideTheSelectedPeriod() throws Exception {
         tools.createUser("mikko95", "password", 195);
         tools.login("mikko95", "password");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 150, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 150, "relaxed jogging in good weather");
         ArrayList<Exercise> exercises = tools.getExerciseList(LocalDate.now(), LocalDate.now());
         for (Exercise exercise : exercises) {
             assertEquals(false, exercise.getDate().isBefore(LocalDate.now()));
@@ -145,15 +145,15 @@ public class JournalToolsTest {
     public void countIntensityLevelWorksProperly() throws Exception {
         tools.createUser("mikko95", "password", 195);
         tools.login("mikko95", "password");
-        Exercise strength = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 2, 60, 0, 0, "strength");
+        Exercise strength = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.strength, 60, 0, 0, "strength");
         assertEquals(IntensityLevel.strength, tools.countIntensityLevel(strength));
-        Exercise light = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 140, "light");
+        Exercise light = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 140, "light");
         assertEquals(IntensityLevel.light, tools.countIntensityLevel(light));
-        Exercise moderate = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 160, "moderate");
+        Exercise moderate = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 160, "moderate");
         assertEquals(IntensityLevel.moderate, tools.countIntensityLevel(moderate));
-        Exercise hard = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 180, "hard");
+        Exercise hard = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 180, "hard");
         assertEquals(IntensityLevel.hard, tools.countIntensityLevel(hard));
-        Exercise maximum = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 10, 195, "maximum");
+        Exercise maximum = new Exercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 10, 195, "maximum");
         assertEquals(IntensityLevel.maximum, tools.countIntensityLevel(maximum));
         tools.logout();
         tools.deleteUser("mikko95");
@@ -167,11 +167,11 @@ public class JournalToolsTest {
     public void monthlyStatsWorksProperly() throws Exception {
         tools.createUser("mikko95", "password", 195);
         tools.login("mikko95", "password");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), 1, 60, 12, 120, "easy jogging that should not be included in this count");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 60, 12, 150, "relaxed jogging in good weather");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 40, 10, 180, "hard running");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 1, 3, 1, 192, "one kilometer at full speed");
-        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), 2, 60, 0, 0, "strength");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now(), Type.endurance, 60, 12, 120, "easy jogging that should not be included in this count");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), Type.endurance, 60, 12, 150, "relaxed jogging in good weather");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), Type.endurance, 40, 10, 180, "hard running");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), Type.endurance, 3, 1, 192, "one kilometer at full speed");
+        tools.addExercise(tools.getLoggedUser().getId(), LocalDate.now().minusMonths(1), Type.strength, 60, 0, 0, "strength");
         double[][] stats = tools.countMonthlyStats(LocalDate.now());
         assertEquals(0, stats[1][2], 0.01);
         assertEquals(5, stats[2][2], 0.01);
