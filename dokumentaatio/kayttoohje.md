@@ -31,25 +31,29 @@ toiminnallisuudet ja osiossa `Exercises` on harjoituksiin liittyvät toiminnalli
 
 Kirjautumisen jälkeen näytetään viikkonäkymä, johon pääsee myös valikosta: `Exercises > Weekly Summary` Viikkonäkymässä näet
 harjoittelustasi kyseisen viikon harjoitusten suorituspäivän, suoritusajan ja intensiteettitason. Viikkoa voi vaihtaa
-painikkeista (ei toimi vielä).
+painikkeista.
 
 ### Harjoituksen lisääminen
 
 Harjoituksen lisäämiseen pääsee valikosta: `Exercises > Add exercise`. Harjoitus lisätään antamalla lomakkeelle harjoituksen 
-tiedot. Viikkonäkymän graafi tukee max. kolmea harjoitusta per päivä (tämä yleensä riittää kovemmillekin treenaajille).
+tiedot. Voimaharjoituksen kilometreihin ja sykkeisiin liittyviin tietoihin ei ole väliä, mitä syötät, mutta loogisinta on jättää ne tyhjäksi. Viikkonäkymän graafi tukee max. kolmea harjoitusta per päivä (tämä yleensä riittää kovemmillekin treenaajille).
 
 ### Kuukausinäkymä
 
 Kuukausinäkymään pääsee valikosta: `Exercises > Monthly Summary` Kuukausinäkymässä näkyy harjoitusmäärät ja niiden kasvu
 kuukausitasolla (ja pian muutakin).
 
-### Harjoitusten selaaminen
+### Harjoitusten selaaminen ja hakeminen
 
-(ei vielä toteutettu)
+Näkymään pääsee valikosta: `Exercises > Previous exercises`. Oletuksena näytetään kuluvan kuukauden harjoitukset. Valitsemalla päivät kalenterinäkymiin ja painamalla `Sort exercises by date` voit hakea harjoituksia alku- ja loppupäivämäärällä. Voit myös poistaa harjoituksen painamalla harjoituksen kohdalla hiiren nappia, jolloin valittu harjoitus näkyy sinisenä ja painamalla nappia `Delete exercise`.
 
 ### Käyttäjäprofiilin muokkaaminen
 
-(ei vielä toteutettu)
+Valitsemalla valikosta `Settings > Update max heart rate` voit asettaa maksimisykkeen uudelleen.
+
+Valitsemalla `Settings > Change password` voit vaihtaa salasanan.
+
+Valitsemalla `Settings > Delete user account` ja vahvistamalla poiston, voit poistaa käyttäjätunnuksesi. Huomioithan, että tätä ei voi perua. 
 
 ### Uloskirjautuminen
 
