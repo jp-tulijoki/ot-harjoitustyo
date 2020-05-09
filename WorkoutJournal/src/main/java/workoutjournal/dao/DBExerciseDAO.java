@@ -67,11 +67,16 @@ public class DBExerciseDAO implements ExerciseDAO {
         p.setString(3, toDate + "");
         ResultSet r = p.executeQuery();
         while (r.next()) {
-            exercises.add(new Exercise(r.getInt("id") ,userId, LocalDate.parse(r.getString("date")), Type.values()[r.getInt("type")], r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
+            exercises.add(new Exercise(r.getInt("id"), userId, LocalDate.parse(r.getString("date")), Type.values()[r.getInt("type")], r.getInt("duration"), r.getInt("distance"), r.getInt("avgHeartRate"), r.getString("description")));
         }
         return exercises;
     }
-
+    
+    /**
+     * Method deletes the exercise with the specified id from the database.
+     * @param id the id number submitted via JournalTools.
+     * @throws SQLException 
+     */
     @Override
     public void deleteExercise(int id) throws SQLException {
         PreparedStatement p = conn.prepareStatement("DELETE FROM Exercises WHERE id = ?");

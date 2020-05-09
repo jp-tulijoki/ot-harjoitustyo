@@ -1,72 +1,55 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package workoutjournal.ui;
 
 import com.sun.javafx.charts.Legend;
 import com.sun.javafx.scene.control.IntegerField;
 import static java.lang.Double.isNaN;
-import static java.time.DayOfWeek.FRIDAY;
-import static java.time.DayOfWeek.MONDAY;
-import static java.time.DayOfWeek.SATURDAY;
-import static java.time.DayOfWeek.SUNDAY;
-import static java.time.DayOfWeek.THURSDAY;
-import static java.time.DayOfWeek.TUESDAY;
-import static java.time.DayOfWeek.WEDNESDAY;
+import static java.time.DayOfWeek.*;
 import java.time.LocalDate;
-import static java.time.temporal.TemporalAdjusters.nextOrSame;
-import static java.time.temporal.TemporalAdjusters.previousOrSame;
+import static java.time.temporal.TemporalAdjusters.*;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.StackedBarChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.chart.*;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import workoutjournal.domain.Exercise;
-import workoutjournal.domain.IntensityLevel;
-import workoutjournal.domain.JournalTools;
-import workoutjournal.domain.Type;
+import workoutjournal.domain.*;
 
 /**
- *
- * @author tulijoki
+ * This class contains the large methods used by the user interface. Most of the
+ * methods are used to generate different views.
  */
 public class UITools {
     private JournalTools tools;
     private LocalDate date;
 
+    /**
+     * Constructor for UITools class.
+     * @param tools JournalTools used by this class.
+     */
     public UITools(JournalTools tools) {
         this.tools = tools;
     }
     
+    /**
+     * Method generates the view for updating max heart rate. 
+     * @return returns a GridPane containing the update view.
+     */
     public GridPane updateMaxHeartRateView() {
+        
         GridPane updateMaxHeartRatePane = new GridPane();
+        
+        updateMaxHeartRatePane.setAlignment(Pos.CENTER);
+        updateMaxHeartRatePane.setHgap(10);
+        updateMaxHeartRatePane.setVgap(10);
+        updateMaxHeartRatePane.setPadding(new Insets(10,10,10,10));
+        
         Label updateMaxHeartRateLabel = new Label("Update max heart rate");
         Label maxHeartRateLabel = new Label("Max heart rate");
         IntegerField maxHeartRateInput = new IntegerField();
@@ -99,15 +82,26 @@ public class UITools {
                 tools.updateMaxHeartRate(maxHeartRateInput.getValue());
                 updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                updateMaxHeartRateStatus.setText("Database connection lost or something unexpected happened. Please try again later.");
             }
         });
         
         return updateMaxHeartRatePane;
     }
-    
+
+    /**
+     * Method generates the view for changing password.
+     * @return returns a GridPane containing the update view.
+     */
     public GridPane changePasswordView() {
+        
         GridPane changePasswordPane = new GridPane();
+        
+        changePasswordPane.setAlignment(Pos.CENTER);
+        changePasswordPane.setHgap(10);
+        changePasswordPane.setVgap(10);
+        changePasswordPane.setPadding(new Insets(10,10,10,10));
+        
         Label changePasswordLabel = new Label("Change password");
         Label oldPasswordLabel = new Label("Old password");
         PasswordField oldPasswordInput = new PasswordField();
@@ -134,15 +128,25 @@ public class UITools {
                 changePasswordStatus.setText("Incorrect old password.");
             }
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                changePasswordStatus.setText("Database connection lost or something unexpected happened. Please try again later.");
             }
         });
         
         return changePasswordPane;
     }
     
+    /**
+     * Method generates a view for adding exercises.
+     * @return returns a GridPane containing the view.
+     */
     public GridPane addExerciseView() {
+        
         GridPane addExercisePane = new GridPane();
+        
+        addExercisePane.setAlignment(Pos.CENTER);
+        addExercisePane.setHgap(10);
+        addExercisePane.setVgap(10);
+        addExercisePane.setPadding(new Insets(10,10,10,10));
         
         Label addExerciseLabel = new Label("Add new exercise");
         Label dateLabel = new Label("Date:");
@@ -182,36 +186,45 @@ public class UITools {
         addExerciseButton.setOnAction((event) -> {
             try {
                 tools.addExercise(tools.getLoggedUser().getId(), datePicker.getValue(), types.getValue(), durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
+                addExerciseConfirmation.setText("Exercise added succesfully");
+                durationInput.setValue(0);
+                distanceInput.setValue(0);
+                avgHeartRateInput.setValue(0);
+                descriptionInput.clear();
             } catch (Exception ex) {
-                addExerciseConfirmation.setText("Database connection lost. Try again later.");
+                addExerciseConfirmation.setText("Database connection lost or something unexpected happened. Try again later.");
             }
-            addExerciseConfirmation.setText("Exercise added succesfully");
-            durationInput.setValue(0);
-            distanceInput.setValue(0);
-            avgHeartRateInput.setValue(0);
-            descriptionInput.clear();
         });
         
         return addExercisePane;
     }
     
-    public BorderPane weeklySummaryView(LocalDate date) {
+    /**
+     * Method generates a weekly summary view.
+     * @param date date specified in the user interface that is used for
+     * specifying the week.
+     * @return returns a BorderPane containing the view.
+     * @throws Exception 
+     */
+    public BorderPane weeklySummaryView(LocalDate date) throws Exception {
         
         BorderPane weeklySummaryView = new BorderPane();
-        
-        try {
-            LocalDate monday = date.with(previousOrSame(MONDAY));
-            LocalDate sunday = date.with(nextOrSame(SUNDAY));
-            StackedBarChart <String, Number> oneWeekChart = oneWeekChart(monday, sunday);
-            weeklySummaryView.setCenter(oneWeekChart);
             
-        } catch (Exception ex) {
-            Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        LocalDate monday = date.with(previousOrSame(MONDAY));
+        LocalDate sunday = date.with(nextOrSame(SUNDAY));
+        StackedBarChart <String, Number> oneWeekChart = oneWeekChart(monday, sunday);
+        weeklySummaryView.setCenter(oneWeekChart);
+
         return weeklySummaryView;
     }
     
+    /**
+     * Method generates the StackedBarChart containing one weeks trainings.
+     * @param monday Monday of the specified week, used as a begin boundary.
+     * @param sunday Sunday of the specified week, used as an end boundary.
+     * @return returns a StackedBarChart.
+     * @throws Exception 
+     */
     public StackedBarChart<String, Number> oneWeekChart(LocalDate monday, LocalDate sunday) throws Exception {
         
         String[] weekdays = {"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
@@ -286,9 +299,15 @@ public class UITools {
         Legend.LegendItem maximum = new Legend.LegendItem("maximum", new Rectangle(10,10,Color.RED));
         Legend.LegendItem strength = new Legend.LegendItem("strength", new Rectangle(10,10,Color.SLATEGRAY));
         legend.getItems().addAll(light, moderate, hard, maximum, strength);
+        
         return oneWeekChart;
     }
     
+    /**
+     * Method counts date ordinals used for generating the StackedBarChart.
+     * @param date date of the exercise
+     * @return returns date ordinal
+     */
     public int countDateOrdinal(LocalDate date) {
         if (date.getDayOfWeek() == MONDAY) {
             return 0;
@@ -307,21 +326,31 @@ public class UITools {
         }   
     }
     
+    /**
+     * Method generates a PieChart containing stats of the distribution of one
+     * month's trainings by type and intensity level.
+     * @param stats monthly stats array
+     * @return returns a PieChart containing distribution of trainings.
+     */
     public PieChart monthlyTrainingsDistribution(double[][] stats) {
+        
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-            new PieChart.Data("Strength", stats[0][0]),
-            new PieChart.Data("Light", stats[1][0]),
-            new PieChart.Data("Moderate", stats[2][0]),
-            new PieChart.Data("Hard", stats[3][0]),
-            new PieChart.Data("Maximum", stats[3][0]));
+            new PieChart.Data("strength", stats[0][0]),
+            new PieChart.Data("light", stats[1][0]),
+            new PieChart.Data("moderate", stats[2][0]),
+            new PieChart.Data("hard", stats[3][0]),
+            new PieChart.Data("maximum", stats[3][0]));
         
         PieChart chart = new PieChart(pieChartData);
         chart.setTitle("Distribution of training types and intensities");
+        chart.setLabelsVisible(false);
+        
         int i = 0;
         for (PieChart.Data data : pieChartData) {
             data.getNode().setStyle("-fx-pie-color: " + IntensityLevel.values()[i].getColor());
             i++;
         }
+        
         Legend legend = (Legend)chart.lookup(".chart-legend");
         legend.getItems().clear();
         Legend.LegendItem light = new Legend.LegendItem("light", new Rectangle(10,10,Color.LIGHTGREEN));
@@ -334,11 +363,20 @@ public class UITools {
         return chart;
     }
     
+    /**
+     * Method generates a BarChart containing the average speed for each
+     * intensity level for the specified month and the month before.
+     * @param currentMonthStats the specified month
+     * @param previousMonthStats the previous month
+     * @return returns a BarChart with the speed data
+     */
     public BarChart<String, Number> monthlySpeedStats(double[][] currentMonthStats, double[][] previousMonthStats) {
+        
         CategoryAxis intensityLevels = new CategoryAxis();
         intensityLevels.setLabel("Intensity level");
         NumberAxis avgSpeed = new NumberAxis();
         avgSpeed.setLabel("Average speed");
+        
         BarChart<String, Number> chart = new BarChart(intensityLevels, avgSpeed);
         chart.setTitle("Average speeds per intensity level");
         
@@ -357,7 +395,14 @@ public class UITools {
         return chart;
     }
     
-    public BorderPane drawMonthlyStats(LocalDate date) throws Exception {
+    /**
+     * Generates a monthly summary view with trainings distribution, average 
+     * speed date, distance development and a brief analysis.
+     * @param date date specified by the user interface, used to specify month
+     * @return returns a BorderPane with the summary view.
+     * @throws Exception 
+     */
+    public BorderPane monthlySummaryView(LocalDate date) throws Exception {
         
         double[][] currentMonthStats = tools.countMonthlyStats(date);
         double[][] previousMonthStats = tools.countMonthlyStats(date.minusMonths(1));
@@ -367,12 +412,14 @@ public class UITools {
         BorderPane monthlyStats = new BorderPane();
         
         VBox monthlyAnalysis = new VBox();
+        monthlyAnalysis.setAlignment(Pos.CENTER);
+        
         Text monthlyAnalysisTitle = new Text("Monthly analysis of " + date.getMonth() + " " + date.getYear() + ": ");
         Text monthlyDistance = new Text("Your total distance covered is " + currentMonthStats[5][1] + " kilometers.");
         Text monthlyDevelopment = new Text("");
         
         if (isNaN(development)) {
-            monthlyDevelopment.setText("As there are no running exercises in the month before, distance development can not be counted");
+            monthlyDevelopment.setText("As there are no running exercises in the month before, distance development can not be counted.");
         } else if (development < 0) {
             monthlyDevelopment.setText("Compared to previous month, your total distance covered decreased by " + Math.abs(development) + " %.");
         } else {
@@ -412,7 +459,14 @@ public class UITools {
         return monthlyStats;
     }
     
-    public BorderPane drawExerciseTable(LocalDate beginDate, LocalDate endDate) throws Exception {
+    /**
+     * Method generates a TableView with exercises with search and delete tool.  
+     * @param beginDate begin boundary for sorting exercises
+     * @param endDate end boundary for sorting exercises
+     * @return returns a TebleView with the tools speficied above.
+     * @throws Exception 
+     */
+    public BorderPane exerciseTable(LocalDate beginDate, LocalDate endDate) throws Exception {
         BorderPane exercisePane = new BorderPane();
         
         TableView<Exercise> exerciseTable = new TableView();
@@ -434,6 +488,8 @@ public class UITools {
         exerciseTable.setItems(exerciseData);
         
         Button deleteButton = new Button("Delete exercise");
+        
+        
         exercisePane.setTop(exerciseTable);
         exercisePane.setBottom(deleteButton);
         
@@ -443,10 +499,19 @@ public class UITools {
                 tools.deleteExercise(selectedExercise.getId());
                 exerciseTable.getItems().remove(selectedExercise);
             } catch (Exception ex) {
-                Logger.getLogger(UITools.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = errorView();
+                exercisePane.setCenter(errorView);
             }
         });
         
         return exercisePane;  
+    }
+    
+    public BorderPane errorView() {
+        BorderPane errorView = new BorderPane();
+        Text errorText = new Text("The database connection is lost or something unexpected happened. Please try again later.");
+        errorView.setCenter(errorText);
+        
+        return errorView;
     }
 }

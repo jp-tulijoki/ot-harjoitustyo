@@ -21,21 +21,26 @@ public class WorkoutJournalUI extends Application {
     private UITools uiTools;
     private LocalDate date;
     
-    public void init() throws SQLException, Exception {
+    public void init() {
         
-        this.conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
-        Statement s = conn.createStatement();
-        try {
-            s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password VARCHAR NOT NULL, maxHeartRate INTEGER)");
-            s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, distance INTEGER, avgHeartRate INTEGER, description TEXT)");
+        try {            
+            this.conn = DriverManager.getConnection("jdbc:sqlite:workoutjournal.db");
+            Statement s = conn.createStatement();
+            
+            try {
+                s.execute("CREATE TABLE Users (id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR NOT NULL, password VARCHAR NOT NULL, maxHeartRate INTEGER)");
+                s.execute("CREATE TABLE Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, type INTEGER, duration INTEGER, distance INTEGER, avgHeartRate INTEGER, description TEXT)");
+            } catch (SQLException ex) {                
+            }
+            this.userDAO = new DBUserDAO(conn);
+            this.exerciseDAO = new DBExerciseDAO(conn);
+            
+            this.jTools = new JournalTools(userDAO, exerciseDAO);
+            this.uiTools = new UITools(jTools);
+            this.date = LocalDate.now();
         } catch (SQLException ex) {
+            Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.userDAO = new DBUserDAO(conn);
-        this.exerciseDAO = new DBExerciseDAO(conn);
-        
-        this.jTools = new JournalTools(userDAO, exerciseDAO);
-        this.uiTools = new UITools(jTools);
-        this.date = LocalDate.now();
     }
     
     public void start(Stage stage) throws Exception {
@@ -139,12 +144,16 @@ public class WorkoutJournalUI extends Application {
         exercises.getItems().addAll(addExercise, previousExercises, weeklySummary, monthlySummary);
         
         actionsMenu.getMenus().addAll(settings, exercises);
+        
         primaryPane.setTop(actionsMenu);
+        
         Scene primaryScene = new Scene(primaryPane);
         
         // Select date tools for searching exercises
         
         GridPane sortExercisePane = new GridPane();
+        sortExercisePane.setHgap(10);
+        
         Label sortExerciseLabel = new Label("Sort exercises by selecting days.");
         Label beginDateLabel = new Label("Begin date: ");
         DatePicker beginDatePicker = new DatePicker(LocalDate.now());
@@ -166,6 +175,10 @@ public class WorkoutJournalUI extends Application {
         // Toggle week buttons for weekly summary
         
         HBox toggleWeekBox = new HBox();
+        
+        toggleWeekBox.setAlignment(Pos.CENTER);
+        toggleWeekBox.setPadding(new Insets(10,10,10,10));
+        
         Button previousWeekButton = new Button("Previous week");
         Button nextWeekButton = new Button("Next week");
         toggleWeekBox.getChildren().addAll(previousWeekButton, nextWeekButton);
@@ -173,6 +186,10 @@ public class WorkoutJournalUI extends Application {
         // Toggle month buttons for monthly summary
         
         HBox toggleMonthBox = new HBox();
+        
+        toggleMonthBox.setAlignment(Pos.CENTER);
+        toggleMonthBox.setPadding(new Insets(10,10,10,10));
+        
         Button previousMonthButton = new Button("Previous month");
         Button nextMonthButton = new Button("Next month");
         toggleMonthBox.getChildren().addAll(previousMonthButton, nextMonthButton);
@@ -182,11 +199,13 @@ public class WorkoutJournalUI extends Application {
         updateMaxHeartRate.setOnAction((event) -> {
             GridPane updateMaxHeartRateView = uiTools.updateMaxHeartRateView();
             primaryPane.setCenter(updateMaxHeartRateView);
+            primaryPane.setBottom(null);
         });
         
         changePassword.setOnAction((event) -> {
             GridPane changePasswordView = uiTools.changePasswordView();
             primaryPane.setCenter(changePasswordView);
+            primaryPane.setBottom(null);
         });
         
         logout.setOnAction((event) -> {
@@ -197,37 +216,46 @@ public class WorkoutJournalUI extends Application {
         addExercise.setOnAction((event) -> {
             GridPane addExerciseView = uiTools.addExerciseView();
             primaryPane.setCenter(addExerciseView);
+            primaryPane.setBottom(null);
         });
         
         previousExercises.setOnAction((event) -> {
             date = LocalDate.now();
             try {
-                BorderPane exerciseTable = uiTools.drawExerciseTable(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
+                BorderPane exerciseTable = uiTools.exerciseTable(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
                 primaryPane.setCenter(exerciseTable);
                 primaryPane.setBottom(sortExercisePane);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
+            }    
         });
         
         weeklySummary.setOnAction((event) -> {
-            date = LocalDate.now();
-            BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
-            primaryPane.setCenter(weeklySummaryView);
-            primaryPane.setBottom(toggleWeekBox);
+            try {
+                date = LocalDate.now();
+                BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
+                primaryPane.setCenter(weeklySummaryView);
+                primaryPane.setBottom(toggleWeekBox);
+            } catch (Exception ex) {
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
+            }
         });
         
         monthlySummary.setOnAction((event) -> {
             date = LocalDate.now();
             try {
-                BorderPane monthlySummaryPane = uiTools.drawMonthlyStats(date);
+                BorderPane monthlySummaryPane = uiTools.monthlySummaryView(date);
                 primaryPane.setCenter(monthlySummaryPane);
                 primaryPane.setBottom(toggleMonthBox);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
+            }            
         });
         
         // Actions for buttons
@@ -245,12 +273,13 @@ public class WorkoutJournalUI extends Application {
                     loginError.setText("User not found or invalid password.");
                 }
             } catch (Exception ex) {
-                loginError.setText("Database connection lost. Try again later.");
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                loginError.setText("Database connection lost or something unexpected happened. Try again later.");
             }
         });
         
         newUserButton.setOnAction((event) -> {
+            usernameInput.clear();
+            passwordInput.clear();
             stage.setScene(newUserScene);
         });
         
@@ -266,6 +295,8 @@ public class WorkoutJournalUI extends Application {
                     userCreationError.setText("Username and password have to be at least 3 characters long.");
                 } else if (jTools.createUser(setUsernameInput.getText(), password, maxHeartRateInput.getValue())) {
                     loginInstruction.setText("New user created succesfully. You may now log in.");
+                    setUsernameInput.clear();
+                    setPasswordInput.clear();
                     stage.setScene(loginScene);
                 } else {
                     userCreationError.setText("Username is already in use. Please choose another username.");
@@ -278,6 +309,8 @@ public class WorkoutJournalUI extends Application {
         });
         
         returnToLoginViewButton.setOnAction((event) -> {
+            setUsernameInput.clear();
+            setPasswordInput.clear();
             stage.setScene(loginScene);
         });
         
@@ -286,12 +319,14 @@ public class WorkoutJournalUI extends Application {
             if (endDatePicker.getValue().isBefore(beginDatePicker.getValue())) {
                 selectDateError.setText("End date must not be before begin date.");
             } else {
-                BorderPane exerciseTable = uiTools.drawExerciseTable(beginDatePicker.getValue(), endDatePicker.getValue());
+                BorderPane exerciseTable = uiTools.exerciseTable(beginDatePicker.getValue(), endDatePicker.getValue());
                 primaryPane.setCenter(exerciseTable);
                 primaryPane.setBottom(sortExercisePane);
             }
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
             }
         });
         
@@ -302,7 +337,9 @@ public class WorkoutJournalUI extends Application {
                 primaryPane.setCenter(weeklySummaryView);
                 primaryPane.setBottom(toggleWeekBox);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
             }
         });
         
@@ -313,27 +350,33 @@ public class WorkoutJournalUI extends Application {
                 primaryPane.setCenter(weeklySummaryView);
                 primaryPane.setBottom(toggleWeekBox);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
             }
         });
         
         previousMonthButton.setOnAction((event) -> {
             try {
                 date = date.minusMonths(1);
-                BorderPane monthlyStats = uiTools.drawMonthlyStats(date);
+                BorderPane monthlyStats = uiTools.monthlySummaryView(date);
                 primaryPane.setCenter(monthlyStats);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
             }
         });
         
         nextMonthButton.setOnAction((event) -> {
             try {
                 date = date.plusMonths(1);
-                BorderPane monthlyStats = uiTools.drawMonthlyStats(date);
+                BorderPane monthlyStats = uiTools.monthlySummaryView(date);
                 primaryPane.setCenter(monthlyStats);
             } catch (Exception ex) {
-                Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
             }
         });
         

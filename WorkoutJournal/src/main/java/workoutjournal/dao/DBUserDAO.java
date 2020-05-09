@@ -1,7 +1,5 @@
 package workoutjournal.dao;
 import java.sql.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import workoutjournal.domain.User;
 
 /**
@@ -65,17 +63,29 @@ public class DBUserDAO implements UserDAO {
         User user = new User(r.getInt("id"), r.getString("username"), r.getString("password"), r.getInt("maxHeartRate"));
         return user;
     }
-
+    
+    /**
+     * Method updates the maxHeartRate of the specified user in the database.
+     * @param userId userId submitted via JournalTools.
+     * @param maxHeartRate maxHeartRate submitted via JournalTools.
+     * @throws SQLException 
+     */
     @Override
-    public void updateMaxHeartRate(int userId, int maxHeartRate) throws Exception {
+    public void updateMaxHeartRate(int userId, int maxHeartRate) throws SQLException {
         PreparedStatement p = conn.prepareStatement("UPDATE users SET maxHeartRate = ? WHERE id = ?");
         p.setInt(1, maxHeartRate);
         p.setInt(2, userId);
         p.executeUpdate();
     }
 
+    /**
+     * Method updates the password of the specified user in the database.
+     * @param userId userId submitted via JournalTools.
+     * @param password password submitted via JournalTools.
+     * @throws SQLException 
+     */
     @Override
-    public void updatePassword(int userId, String password) throws Exception {
+    public void updatePassword(int userId, String password) throws SQLException {
         PreparedStatement p = conn.prepareStatement("UPDATE users SET password = ? WHERE id = ?");
         p.setString(1, password);
         p.setInt(2, userId);

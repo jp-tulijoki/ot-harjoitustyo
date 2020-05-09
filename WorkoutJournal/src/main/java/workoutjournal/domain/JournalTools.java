@@ -232,6 +232,16 @@ public class JournalTools {
         return Math.round((currentMonthDistance / previousMonthDistance - 1) * 100); 
     }
     
+    /**
+     * Method counts monthly stats in the form of two dimensional array. The 
+     * rows from 0 to 4 represent the intensity levels of that ordinal and  
+     * row 5 represent total sum of endurance training duration and distance.
+     * Column 0 represents exercise durations, column 1 endurance training 
+     * distances and column 2 endurance training average speeds.
+     * @param date date specified in the user interface is used to specify month
+     * @return returns 2d double array with values specified above.
+     * @throws Exception 
+     */
     public double[][] countMonthlyStats(LocalDate date) throws Exception {
         double[][] stats = new double[6][3];
         LocalDate firstDayOfMonth = date.withDayOfMonth(1);
@@ -256,6 +266,15 @@ public class JournalTools {
         return stats;
     }
     
+    /**
+     * A simple analysis tool for one month's training. The method counts if
+     * 80 % of the endurance training is light, if other endurance training 
+     * intensities vary from moderate to maximum and if the amount of strength
+     * training is sufficient.
+     * @param monthlyStats monthly stats array
+     * @return returns boolean array with value true if the requirement 
+     * specified above is met and false if not.
+     */
     public boolean[] monthlyAnalysis(double[][] monthlyStats) {
         boolean[] analysis = new boolean[3];
         if (monthlyStats[5][0] != 0) {
