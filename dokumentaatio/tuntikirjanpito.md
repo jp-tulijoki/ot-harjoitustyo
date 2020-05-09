@@ -14,4 +14,5 @@ pvm | tunnit | tehdyt asiat
 28.4. | 11 | alustava kuukausinäkymä, lisää testejä, javadoc, käyttöohje, arkkitehtuurikuvaus, uusi release
 7.5. | 6 | toiminnallisuudet käyttäjähallintaan
 8.5 | 10 | toiminnallisuuksia harjoitustilastoihin
-yhteensä | 85 | 
+9.5. | 14 | viilauksia, koodin siistimistä, dokumentaatioiden viimeistelyä
+yhteensä | 99 | 
