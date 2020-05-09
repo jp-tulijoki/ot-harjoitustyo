@@ -315,6 +315,8 @@ public class WorkoutJournalUI extends Application {
             try {
                 if (username.length() < 3 || password.length() < 3) {
                     userCreationError.setText("Username and password have to be at least 3 characters long.");
+                } else if (maxHeartRateInput.getValue() == 0) {
+                    userCreationError.setText("Max heart rate must be more than zero.");
                 } else if (jTools.createUser(setUsernameInput.getText(), password, maxHeartRateInput.getValue())) {
                     loginInstruction.setText("New user created succesfully. You may now log in.");
                     setUsernameInput.clear();

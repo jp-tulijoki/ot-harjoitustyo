@@ -79,8 +79,12 @@ public class UITools {
         
         updateMaxHeartRateButton.setOnAction((event) -> {
             try {
-                tools.updateMaxHeartRate(maxHeartRateInput.getValue());
-                updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
+                if (maxHeartRateInput.getValue() > 0) {
+                    tools.updateMaxHeartRate(maxHeartRateInput.getValue());
+                    updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
+                } else {
+                    updateMaxHeartRateStatus.setText("Max heart rate must be more than zero.");
+                }
             } catch (Exception ex) {
                 updateMaxHeartRateStatus.setText("Database connection lost or something unexpected happened. Please try again later.");
             }
