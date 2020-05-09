@@ -133,8 +133,9 @@ public class WorkoutJournalUI extends Application {
         Menu settings = new Menu("Settings");
         MenuItem updateMaxHeartRate = new MenuItem("Update max heart rate");
         MenuItem changePassword = new MenuItem("Change password");
+        MenuItem deleteUser = new MenuItem("Delete user account");
         MenuItem logout = new MenuItem("Log out");
-        settings.getItems().addAll(updateMaxHeartRate, changePassword, logout);
+        settings.getItems().addAll(updateMaxHeartRate, changePassword, deleteUser, logout);
         
         Menu exercises = new Menu("Exercises");
         MenuItem addExercise = new MenuItem("Add exercise");
@@ -148,6 +149,22 @@ public class WorkoutJournalUI extends Application {
         primaryPane.setTop(actionsMenu);
         
         Scene primaryScene = new Scene(primaryPane);
+        
+        // Delete user view
+        
+        GridPane deleteUserConfirmation = new GridPane();
+            
+        deleteUserConfirmation.setAlignment(Pos.CENTER);
+        deleteUserConfirmation.setHgap(10);
+        deleteUserConfirmation.setVgap(10);
+        deleteUserConfirmation.setPadding(new Insets(10,10,10,10));
+            
+        Label deleteUserConfirmationLabel = new Label("Are you sure you want to delete your user account?. This can not be undone.");
+        Button deleteUserButton = new Button("Yes. Delete my account.");
+        Button returnToWeeklySummaryButton = new Button("No. Return to weekly summary.");
+        deleteUserConfirmation.add(deleteUserConfirmationLabel, 0, 0);
+        deleteUserConfirmation.add(deleteUserButton, 0, 1);
+        deleteUserConfirmation.add(returnToWeeklySummaryButton, 1, 1);
         
         // Select date tools for searching exercises
         
@@ -205,6 +222,11 @@ public class WorkoutJournalUI extends Application {
         changePassword.setOnAction((event) -> {
             GridPane changePasswordView = uiTools.changePasswordView();
             primaryPane.setCenter(changePasswordView);
+            primaryPane.setBottom(null);
+        });
+        
+        deleteUser.setOnAction((event) -> {
+            primaryPane.setCenter(deleteUserConfirmation);
             primaryPane.setBottom(null);
         });
         
@@ -312,6 +334,36 @@ public class WorkoutJournalUI extends Application {
             setUsernameInput.clear();
             setPasswordInput.clear();
             stage.setScene(loginScene);
+        });
+        
+        deleteUserButton.setOnAction((event) -> {
+            try {
+                if (jTools.deleteUser(jTools.getLoggedUser().getUsername())) {
+                    loginError.setText("Your user account has been deleted. Thank you for using WorkoutJournal.");
+                    stage.setScene(loginScene);
+                } else {
+                    BorderPane errorView = uiTools.errorView();
+                    primaryPane.setCenter(errorView);
+                    primaryPane.setBottom(null);
+                }
+            } catch (Exception ex) {
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
+            }
+        });
+        
+        returnToWeeklySummaryButton.setOnAction((event) -> {
+            try {
+                date = LocalDate.now();
+                BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
+                primaryPane.setCenter(weeklySummaryView);
+                primaryPane.setBottom(toggleWeekBox);
+            } catch (Exception ex) {
+                BorderPane errorView = uiTools.errorView();
+                primaryPane.setCenter(errorView);
+                primaryPane.setBottom(null);
+            }
         });
         
         sortExercisesButton.setOnAction((event) -> {
