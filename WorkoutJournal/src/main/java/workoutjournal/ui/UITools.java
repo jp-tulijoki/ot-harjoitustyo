@@ -84,11 +84,15 @@ public class UITools {
                     tools.updateMaxHeartRate(maxHeartRateInput.getValue());
                     updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
                 } else {
-                    updateMaxHeartRateStatus.setText("Max heart rate must be between 0 and 220.");
+                    updateMaxHeartRateStatus.setText("Max heart rate must be between 1 and 220.");
                 }
             } catch (Exception ex) {
                 updateMaxHeartRateStatus.setText("Database connection lost or something unexpected happened. Please try again later.");
             }
+        });
+        
+        countMaxHeartRateButton.setOnAction((event) -> {
+            maxHeartRateInput.setValue(tools.countMaxHeartRate(ageInput.getValue(), sexes.getValue()));
         });
         
         return updateMaxHeartRatePane;
