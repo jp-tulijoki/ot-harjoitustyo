@@ -1,6 +1,6 @@
 # Käyttöohje
 
-Lataa uusimman releasen .jar-tiedosto. 
+Lataa sovelluksen .jar-tiedosto [täältä](https://github.com/jp-tulijoki/ot-harjoitustyo/releases/tag/1.0). 
 
 ## Konfiguraatiot
 
@@ -9,7 +9,7 @@ jäljiltä ohjelman kansiossa on testitietokantatiedosto, se kannattaa poistaa, 
 
 ## Ohjelman käynnistäminen
 
-Ohjelma käynnistetään komennolla `java -jar {.jar-tiedoston nimi}`.
+Ohjelma käynnistetään komennolla `java -jar WorkoutJournal-v1.0.jar`.
 
 ## Kirjautuminen
 
