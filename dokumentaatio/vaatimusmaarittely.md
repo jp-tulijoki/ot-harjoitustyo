@@ -6,9 +6,9 @@ Tällä hetkellä sovelluksella on ainoastaan yksi käyttäjärooli eli normaali
 ## Perusversion tarjoama toiminnallisuus
 ### Ennen kirjautumista
 * käyttäjä voi luoda järjestelmään käyttäjätunnuksen TEHTY
-  * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä TEHTY
-  * lisäksi on asetettava salasana, jonka pituus on vähintään 3 merkkiä TEHTY
-  * käyttäjätunnuksen luonnin yhteydessä asetetaan maksimisyke, jonka voi asettaa suoraan tai laskea laskurilla TEHTY
+  * käyttäjätunnuksen tulee olla uniikki ja pituudeltaan vähintään 3 merkkiä ja enintään 20 merkkiä TEHTY
+  * lisäksi on asetettava salasana, jonka pituus on vähintään 3 merkkiä ja enintään 20 merkkiä TEHTY
+  * käyttäjätunnuksen luonnin yhteydessä asetetaan maksimisyke, jonka voi asettaa suoraan tai laskea laskurilla. Sykkeen tulee olla enemmän kuin 0 ja enintään 220. TEHTY
 * käyttäjä voi kirjautua järjestelmään TEHTY
   * kirjautuminen onnistuu syöttämällä oma käyttäjätunnus ja salasana TEHTY
   * käyttäjän tietojen olemassaolo tarkistetaan ja käyttäjätiedot haetaan tietokannasta TEHTY
