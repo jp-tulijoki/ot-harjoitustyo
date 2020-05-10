@@ -27,6 +27,18 @@ jälkeen tietokannasta, jotta testien lopputulos ei riipu siitä, mitä tietokan
 ### Testien kattavuus
 
 Käyttöliittymää ei ole testattu automaattisesti. Sovelluslogiikan ja DAO:n testien rivikattavuus on 98 % ja haaraumakattavuus
-88 %. Muutama getteri jää testien ulkopuolelle ja yhden JournalToolsin metodin kaikkia haaraumia ei käydä läpi.
+87 %. Muutama getteri jää testien ulkopuolelle ja yhden JournalToolsin metodin kaikkia rivejä ja haaraumia ei käydä läpi.
 
 ## Järjestelmätason testit
+
+Järjestelmätason testit on suoritettu manuaalisesti.
+
+### Asennus
+
+Sovellus on ladattu [käyttöohjeen](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md) mukaisesti ja sovellusta on testattu ladatusta -jar.tiedostosta.
+
+### Toiminnallisuudet
+
+[Vaatimusmäärittelyyn](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md) sisältyvät toiminnallisuudet on käyty läpi. Testauksessa on pyritty löytämään järjestelmän haavoittuvuuksia antamalla virheellisiä syötteitä kaikkiin mahdollisiin kenttiin. Lisäksi on pyritty tekemään laskelmia, että sovelluksen piirtämät graafit ovat syötteiden mukaisia.
+
+Ilmi tulleita bugeja on pyritty korjaamaan saman tien. Viimeisestä versiosta ei löytynyt mitään, mitä ei voitu korjata. 
