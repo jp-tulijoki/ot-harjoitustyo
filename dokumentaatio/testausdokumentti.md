@@ -29,6 +29,8 @@ jälkeen tietokannasta, jotta testien lopputulos ei riipu siitä, mitä tietokan
 Käyttöliittymää ei ole testattu automaattisesti. Sovelluslogiikan ja DAO:n testien rivikattavuus on 98 % ja haaraumakattavuus
 87 %. Muutama getteri jää testien ulkopuolelle ja yhden JournalToolsin metodin kaikkia rivejä ja haaraumia ei käydä läpi.
 
+![kattavuusraportti](https://github.com/jp-tulijoki/ot-harjoitustyo/blob/master/dokumentaatio/kuvat/jacocoReport.jpg)
+
 ## Järjestelmätason testit
 
 Järjestelmätason testit on suoritettu manuaalisesti.
