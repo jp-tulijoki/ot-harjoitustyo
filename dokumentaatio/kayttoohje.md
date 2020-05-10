@@ -19,8 +19,7 @@ Mikäli haluat luoda käyttäjätunnuksen, paina `Create new user` nappia.
 ## Käyttäjätunnuksen luominen
 
 Voit luoda käyttäjän antamalla lomakkeella pyydetyt tiedot ja painamalla `Create new user` nappia. Maksimisykkeen voit
-kirjoittaa itse, jos tiedät tai laskea laskurilla. Jos tunnuksen luominen onnistuu palataan kirjautumisnäkymään. Jos ei, voit
-kokeilla luoda tunnuksen uudella käyttäjänimellä.
+kirjoittaa itse, jos tiedät tai laskea laskurilla. Käyttäjätunnuksen ja salasanan tulee olla vähintään 3 merkkiä ja enintään 20 merkkiä pitkiä, ja sykkeen enemmän kuin nolla ja korkeintaan 220. Jos tunnuksen luominen onnistuu palataan kirjautumisnäkymään. Jos ei, voit kokeilla luoda tunnuksen uudella käyttäjänimellä.
 
 ## Päänäkymän toiminnallisuudet
 
@@ -36,12 +35,11 @@ painikkeista.
 ### Harjoituksen lisääminen
 
 Harjoituksen lisäämiseen pääsee valikosta: `Exercises > Add exercise`. Harjoitus lisätään antamalla lomakkeelle harjoituksen 
-tiedot. Voimaharjoituksen kilometreihin ja sykkeisiin liittyviin tietoihin ei ole väliä, mitä syötät, mutta loogisinta on jättää ne tyhjäksi. Viikkonäkymän graafi tukee max. kolmea harjoitusta per päivä (tämä yleensä riittää kovemmillekin treenaajille).
+tiedot. Voimaharjoituksen kilometreihin ja sykkeisiin liittyviin tietoihin ei ole väliä, mitä syötät (näitä ei käytetä tilastojen laskemisessa), mutta loogisinta on jättää ne tyhjäksi. Viikkonäkymän graafi tukee max. kolmea harjoitusta per päivä (tämä yleensä riittää kovemmillekin treenaajille). Enemmänkin voi syöttää, mutta viikkonäkymä jättää tällöin osan päivän harjoituksista pois.
 
 ### Kuukausinäkymä
 
-Kuukausinäkymään pääsee valikosta: `Exercises > Monthly Summary` Kuukausinäkymässä näkyy harjoitusmäärät ja niiden kasvu
-kuukausitasolla (ja pian muutakin).
+Kuukausinäkymään pääsee valikosta: `Exercises > Monthly Summary` Kuukausinäkymässä näkyy harjoitusten jakautuminen harjoitustyypin ja intensiteetin mukaan, harjoitusvauhdit intensiteetin mukaan, kokonaisjuoksukilometrit sekä niiden muutos suhteessa edelliseen kuukauteen sekä yksinkertainen analyysi harjoittelun jakautumisesta. Kuukausia voi selata painikkeista.
 
 ### Harjoitusten selaaminen ja hakeminen
 
@@ -49,9 +47,9 @@ Näkymään pääsee valikosta: `Exercises > Previous exercises`. Oletuksena nä
 
 ### Käyttäjäprofiilin muokkaaminen
 
-Valitsemalla valikosta `Settings > Update max heart rate` voit asettaa maksimisykkeen uudelleen.
+Valitsemalla valikosta `Settings > Update max heart rate` voit asettaa maksimisykkeen uudelleen. Kriteerit ovat samat kuin uutta käyttäjää luotaessa.
 
-Valitsemalla `Settings > Change password` voit vaihtaa salasanan.
+Valitsemalla `Settings > Change password` voit vaihtaa salasanan. Kriteerit ovat samat kuin uutta käyttäjää luotaessa.
 
 Valitsemalla `Settings > Delete user account` ja vahvistamalla poiston, voit poistaa käyttäjätunnuksesi. Huomioithan, että tätä ei voi perua. 
 
