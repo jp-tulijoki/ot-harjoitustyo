@@ -53,6 +53,7 @@ public class UITools {
         Label updateMaxHeartRateLabel = new Label("Update max heart rate");
         Label maxHeartRateLabel = new Label("Max heart rate");
         IntegerField maxHeartRateInput = new IntegerField();
+        maxHeartRateInput.setValue(tools.getLoggedUser().getMaxHeartRate());
         Label countMaxHeartRate = new Label("Count default max heart rate");
         Label age = new Label("Age");
         IntegerField ageInput = new IntegerField();
@@ -79,11 +80,11 @@ public class UITools {
         
         updateMaxHeartRateButton.setOnAction((event) -> {
             try {
-                if (maxHeartRateInput.getValue() > 0) {
+                if (maxHeartRateInput.getValue() > 0 && maxHeartRateInput.getValue() <= 220) {
                     tools.updateMaxHeartRate(maxHeartRateInput.getValue());
                     updateMaxHeartRateStatus.setText("Max heart rate saved successfully");
                 } else {
-                    updateMaxHeartRateStatus.setText("Max heart rate must be more than zero.");
+                    updateMaxHeartRateStatus.setText("Max heart rate must be between 0 and 220.");
                 }
             } catch (Exception ex) {
                 updateMaxHeartRateStatus.setText("Database connection lost or something unexpected happened. Please try again later.");
@@ -124,8 +125,8 @@ public class UITools {
         
         changePasswordButton.setOnAction((event) -> {
         try {
-            if (newPasswordInput.getText().length() < 3) {
-                changePasswordStatus.setText("New password has to be at least 3 characters long.");
+            if (newPasswordInput.getText().length() < 3 || newPasswordInput.getText().length() > 20) {
+                changePasswordStatus.setText("Password length has to be between 3 and 20 characters.");
             } else if (tools.changePassword(oldPasswordInput.getText(), newPasswordInput.getText())) {
                 changePasswordStatus.setText("Password changed successfully.");
             } else {
@@ -343,7 +344,7 @@ public class UITools {
             new PieChart.Data("light", stats[1][0]),
             new PieChart.Data("moderate", stats[2][0]),
             new PieChart.Data("hard", stats[3][0]),
-            new PieChart.Data("maximum", stats[3][0]));
+            new PieChart.Data("maximum", stats[4][0]));
         
         PieChart chart = new PieChart(pieChartData);
         chart.setTitle("Distribution of training types and intensities");
@@ -500,8 +501,10 @@ public class UITools {
         deleteButton.setOnAction((event) -> {
             try {
                 Exercise selectedExercise = exerciseTable.getSelectionModel().getSelectedItem();
-                tools.deleteExercise(selectedExercise.getId());
-                exerciseTable.getItems().remove(selectedExercise);
+                if (selectedExercise != null) {
+                    tools.deleteExercise(selectedExercise.getId());
+                    exerciseTable.getItems().remove(selectedExercise);
+                }               
             } catch (Exception ex) {
                 BorderPane errorView = errorView();
                 exercisePane.setCenter(errorView);

@@ -247,6 +247,9 @@ public class WorkoutJournalUI extends Application {
                 BorderPane exerciseTable = uiTools.exerciseTable(date.withDayOfMonth(1), date.withDayOfMonth(date.lengthOfMonth()));
                 primaryPane.setCenter(exerciseTable);
                 primaryPane.setBottom(sortExercisePane);
+                beginDatePicker.setValue(LocalDate.now());
+                endDatePicker.setValue(LocalDate.now());
+                selectDateError.setText("");
             } catch (Exception ex) {
                 BorderPane errorView = uiTools.errorView();
                 primaryPane.setCenter(errorView);
@@ -288,6 +291,7 @@ public class WorkoutJournalUI extends Application {
                     BorderPane weeklySummaryView = uiTools.weeklySummaryView(date);
                     usernameInput.clear();
                     passwordInput.clear();
+                    loginError.setText("");
                     primaryPane.setCenter(weeklySummaryView);
                     primaryPane.setBottom(toggleWeekBox);
                     stage.setScene(primaryScene);
@@ -302,6 +306,7 @@ public class WorkoutJournalUI extends Application {
         newUserButton.setOnAction((event) -> {
             usernameInput.clear();
             passwordInput.clear();
+            loginError.setText("");
             stage.setScene(newUserScene);
         });
         
@@ -313,14 +318,17 @@ public class WorkoutJournalUI extends Application {
             String username = setUsernameInput.getText();
             String password = setPasswordInput.getText();
             try {
-                if (username.length() < 3 || password.length() < 3) {
-                    userCreationError.setText("Username and password have to be at least 3 characters long.");
-                } else if (maxHeartRateInput.getValue() == 0) {
-                    userCreationError.setText("Max heart rate must be more than zero.");
+                if (username.length() < 3 || username.length() > 20 || password.length() < 3 || password.length() > 20) {
+                    userCreationError.setText("Username and password length have to be between 3 and 20 characters.");
+                } else if (maxHeartRateInput.getValue() == 0 || maxHeartRateInput.getValue() > 220) {
+                    userCreationError.setText("Max heart rate must be between 0 and 220.");
                 } else if (jTools.createUser(setUsernameInput.getText(), password, maxHeartRateInput.getValue())) {
                     loginInstruction.setText("New user created succesfully. You may now log in.");
                     setUsernameInput.clear();
                     setPasswordInput.clear();
+                    maxHeartRateInput.setValue(0);
+                    ageInput.setValue(0);
+                    userCreationError.setText("");
                     stage.setScene(loginScene);
                 } else {
                     userCreationError.setText("Username is already in use. Please choose another username.");
@@ -335,6 +343,9 @@ public class WorkoutJournalUI extends Application {
         returnToLoginViewButton.setOnAction((event) -> {
             setUsernameInput.clear();
             setPasswordInput.clear();
+            maxHeartRateInput.setValue(0);
+            ageInput.setValue(0);
+            userCreationError.setText("");
             stage.setScene(loginScene);
         });
         
@@ -376,6 +387,7 @@ public class WorkoutJournalUI extends Application {
                 BorderPane exerciseTable = uiTools.exerciseTable(beginDatePicker.getValue(), endDatePicker.getValue());
                 primaryPane.setCenter(exerciseTable);
                 primaryPane.setBottom(sortExercisePane);
+                selectDateError.setText("");
             }
             } catch (Exception ex) {
                 BorderPane errorView = uiTools.errorView();
