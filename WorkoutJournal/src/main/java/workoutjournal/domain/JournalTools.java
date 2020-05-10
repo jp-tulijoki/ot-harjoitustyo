@@ -141,11 +141,25 @@ public class JournalTools {
         return loggedIn;
     }
     
+    /**
+     * Method updates the heart rate of the user curently logged in.
+     * @param maxHeartRate updated max heart rate given by the user.
+     * @throws Exception 
+     */
     public void updateMaxHeartRate(int maxHeartRate) throws Exception {
         userDAO.updateMaxHeartRate(loggedIn.getId(), maxHeartRate);
         loggedIn = userDAO.getUserCredentials(loggedIn.getUsername());
     }
     
+    /**
+     * Method changes the password of the user currently logged in.
+     * @param oldPassword old password given by the user
+     * @param newPassword new password given by the user
+     * @return returns false if the old password is incorrect and true if the 
+     * change was successfull.
+     * @throws NoSuchAlgorithmException
+     * @throws Exception 
+     */
     public boolean changePassword(String oldPassword, String newPassword) throws NoSuchAlgorithmException, Exception {
         oldPassword = hashPassword(oldPassword);
         if (!(getLoggedUser().getPassword().equals(oldPassword))) {
@@ -189,6 +203,11 @@ public class JournalTools {
         return exerciseDAO.getExercises(loggedIn.getId(), dateFrom, dateTo);
     }
     
+    /**
+     * Method deletes the exercise with the specified id.
+     * @param id the exercise id
+     * @throws Exception 
+     */
     public void deleteExercise(int id) throws Exception {
         exerciseDAO.deleteExercise(id);
     }
@@ -287,6 +306,9 @@ public class JournalTools {
             if (monthlyStats[0][0] / monthlyStats[5][0] > 0.15) {
                 analysis[2] = true;
             }
+        }
+        if (monthlyStats[5][0] == 0 && monthlyStats[0][0] != 0) {
+            analysis[2] = true;
         }
         return analysis;
     }

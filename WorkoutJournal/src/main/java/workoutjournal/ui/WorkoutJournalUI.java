@@ -12,6 +12,10 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import workoutjournal.domain.*;
 
+/**
+ * This class contains the main structure of the user interface.
+ * @author tulijoki
+ */
 public class WorkoutJournalUI extends Application {
     
     private Connection conn;
@@ -21,6 +25,10 @@ public class WorkoutJournalUI extends Application {
     private UITools uiTools;
     private LocalDate date;
     
+    /**
+     * The init method establishes the database connection, creates the 
+     * database tables if necessary and creates the dependencies.
+     */
     public void init() {
         
         try {            
@@ -43,7 +51,11 @@ public class WorkoutJournalUI extends Application {
         }
     }
     
-    public void start(Stage stage) throws Exception {
+    /**
+     * The start method contains the main structure of the user interface.
+     * @param stage the stage used in the application.
+     */
+    public void start(Stage stage) {
         
         // Login scene
         
@@ -292,6 +304,7 @@ public class WorkoutJournalUI extends Application {
                     usernameInput.clear();
                     passwordInput.clear();
                     loginError.setText("");
+                    loginInstruction.setText("Login with your username and password");
                     primaryPane.setCenter(weeklySummaryView);
                     primaryPane.setBottom(toggleWeekBox);
                     stage.setScene(primaryScene);
@@ -307,6 +320,7 @@ public class WorkoutJournalUI extends Application {
             usernameInput.clear();
             passwordInput.clear();
             loginError.setText("");
+            loginInstruction.setText("Login with your username and password");
             stage.setScene(newUserScene);
         });
         
@@ -450,11 +464,22 @@ public class WorkoutJournalUI extends Application {
         stage.show();
     }
     
-    public void stop() throws SQLException {
-        conn.close();
+    /**
+     * The stop method closes the database connection.
+     */
+    public void stop() {
+        try {
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(WorkoutJournalUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
-    public static void main(String[] args) throws SQLException {
+    /**
+     * The main method launches the application.
+     * @param args 
+     */
+    public static void main(String[] args) {
         launch(WorkoutJournalUI.class);
     }   
 }

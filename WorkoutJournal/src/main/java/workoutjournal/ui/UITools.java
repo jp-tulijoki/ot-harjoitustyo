@@ -190,12 +190,16 @@ public class UITools {
         
         addExerciseButton.setOnAction((event) -> {
             try {
-                tools.addExercise(tools.getLoggedUser().getId(), datePicker.getValue(), types.getValue(), durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
-                addExerciseConfirmation.setText("Exercise added succesfully");
-                durationInput.setValue(0);
-                distanceInput.setValue(0);
-                avgHeartRateInput.setValue(0);
-                descriptionInput.clear();
+                if (avgHeartRateInput.getValue() > tools.getLoggedUser().getMaxHeartRate()) {
+                    addExerciseConfirmation.setText("Average heart rate can't be higher than your max heart rate");
+                } else {
+                    tools.addExercise(tools.getLoggedUser().getId(), datePicker.getValue(), types.getValue(), durationInput.getValue(), distanceInput.getValue(), avgHeartRateInput.getValue(), descriptionInput.getText());
+                    addExerciseConfirmation.setText("Exercise added succesfully");
+                    durationInput.setValue(0);
+                    distanceInput.setValue(0);
+                    avgHeartRateInput.setValue(0);
+                    descriptionInput.clear();
+                }
             } catch (Exception ex) {
                 addExerciseConfirmation.setText("Database connection lost or something unexpected happened. Try again later.");
             }
@@ -380,7 +384,7 @@ public class UITools {
         CategoryAxis intensityLevels = new CategoryAxis();
         intensityLevels.setLabel("Intensity level");
         NumberAxis avgSpeed = new NumberAxis();
-        avgSpeed.setLabel("Average speed");
+        avgSpeed.setLabel("Average speed (min/km)");
         
         BarChart<String, Number> chart = new BarChart(intensityLevels, avgSpeed);
         chart.setTitle("Average speeds per intensity level");
@@ -514,6 +518,10 @@ public class UITools {
         return exercisePane;  
     }
     
+    /**
+     * Method generates an error view for unexpected situations.
+     * @return returns a BorderPane with error message.
+     */
     public BorderPane errorView() {
         BorderPane errorView = new BorderPane();
         Text errorText = new Text("The database connection is lost or something unexpected happened. Please try again later.");
