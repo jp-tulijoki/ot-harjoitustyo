@@ -15,4 +15,5 @@ pvm | tunnit | tehdyt asiat
 7.5. | 6 | toiminnallisuudet käyttäjähallintaan
 8.5 | 10 | toiminnallisuuksia harjoitustilastoihin
 9.5. | 14 | viilauksia, koodin siistimistä, dokumentaatioiden viimeistelyä
-yhteensä | 99 | 
+10.5 | 5 | bugien korjausta, viimeistelyä, testaus ja loppupalautus
+yhteensä | 104 | 
