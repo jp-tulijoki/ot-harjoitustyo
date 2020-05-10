@@ -19,6 +19,7 @@ Tällä hetkellä sovelluksella on ainoastaan yksi käyttäjärooli eli normaali
   * käyttäjä voi vaihtaa salasanan TEHTY
 * käyttäjä voi halutessaan poistaa käyttäjäprofiilinsa TEHTY
 * käyttäjä voi lisätä uuden liikuntasuorituksen TEHTY
+* käyttäjä voi poistaa liikuntasuorituksen TEHTY
 * käyttäjä näkee perusnäkymässä kuluvan viikon harjoittelun TEHTY
 * käyttäjä voi myös tarkastella aiempia suorituksiaan TEHTY
 * käyttäjä voi tarkastella yhteenvetoa harjoittelustaan kuukausitasolla TEHTY
